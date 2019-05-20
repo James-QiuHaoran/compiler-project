@@ -2,8 +2,9 @@
 
 #define LBL_NAME_LEN 8
 #define REG_NAME_LEN 128
-#define VAR_NAME_LEN 13
+#define VAR_NAME_LEN 14
 #define STR_MAX_LEN 1024
+#define DIM_STR_LEN 128
 
 #define GLOBAL_TAB_SIZE 256
 #define LOCAL_TAB_SIZE 256
@@ -11,7 +12,7 @@
 
 #define STR_HASH_LEN 4
 
-typedef enum { typeCon, typeId, typeOpr, typeFunc } nodeEnum;
+typedef enum { typeCon, typeId, typeArr, typeOpr, typeFunc } nodeEnum;
 typedef enum { varTypeInt, varTypeChar, varTypeStr, varTypeNil } varTypeEnum;
 typedef enum { typeFuncList, typeStmtList } listTypeEnum;
 
@@ -35,6 +36,20 @@ typedef struct oprNodeType {
     int nops;                   /* number of operands */
     struct nodeType *op[1];     /* operands */
 } oprNodeType;
+
+/* arrays */
+typedef struct arrNodeType {
+    struct arrOffsetListNodeType *offsetListHead;
+    struct arrOffsetListNodeType *offsetListTail;
+    char name[VAR_NAME_LEN];
+    int dimension;
+    int size;
+} arrNodeType;
+
+typedef struct arrOffsetListNodeType {
+    struct nodeType *offset;
+    struct arrOffsetListNodeType *next;
+} arrOffsetListNodeType;
 
 /* functions */
 typedef struct funcNodeType {
@@ -68,6 +83,7 @@ typedef struct nodeType {
     union {
         conNodeType con;        /* constants */
         idNodeType id;          /* identifiers */
+        arrNodeType arr;        /* arrays */
         oprNodeType opr;        /* operators */
         funcNodeType func;      /* functions*/
     };
@@ -76,14 +92,22 @@ typedef struct nodeType {
 /* stacks - including symbol tables */
 typedef struct StackSym {
     StrMap *symbol_table;
+    StrMap *arr_dim_sym_tab;
     int num_args;
     int num_local_vars;
     struct StackSym *lower;
 } StackSym;
 
+/* symbol table including dimension table */
+typedef struct SymTab {
+    StrMap *symbol_table;
+    StrMap *arr_dim_sym_tab;
+    int size;
+} SymTab;
+
 /* symbol tables */
-extern StrMap* global_sym_tab;
-extern StrMap* func_sym_tab;
+extern SymTab* global_sym_tab;
+extern SymTab* func_sym_tab;
 extern StackSym* local_sym_tab;
 
 /* strings */
