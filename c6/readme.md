@@ -23,6 +23,8 @@ In addition, these features have been added to c6:
 - Control flow: `break` and `continue`;
 - String functioning as other normal variables (assignment, comparison, print);
 - Multi-dimensional arrays;
+- String concatenation;
+- Reference (`*`) & Dereference (`&`);
 
 ## Example programs
 
@@ -47,5 +49,5 @@ There are 15 tests in the `test` directory. To run them, simply execute `./run_t
 
 ## Contact
 
-- Author: James, Qiu Haoran
-- Email: jamesqiu@hku.hk
+- Author: James, Qiu Haoran; Bob, Li Boxuan; Casper, Chen Cheng;
+- Email: jamesqiu@hku.hk; liboxuan@hku.hk; susume@hku.hk;
