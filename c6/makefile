@@ -1,6 +1,6 @@
 all: c6c nas
 
-c6c: lex.yy.c y.tab.c c6c.c strmap.c
+c6c: cleanc6 lex.yy.c y.tab.c c6c.c strmap.c
 	gcc -o c6c lex.yy.c y.tab.c c6c.c strmap.c
 
 lex.yy.c: c6.l
@@ -9,7 +9,7 @@ lex.yy.c: c6.l
 y.tab.c: c6.y
 	bison -y -d c6.y
 
-nas: nas.c nas.tab.c
+nas: cleannas nas.c nas.tab.c
 	gcc -o nas nas.c nas.tab.c
 
 nas.c: nas.l
