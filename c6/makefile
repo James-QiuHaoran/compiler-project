@@ -9,7 +9,7 @@ lex.yy.c: c6.l
 y.tab.c: c6.y
 	bison -y -d c6.y
 
-nas: nas.c nas.tab.c
+nas: cleannas nas.c nas.tab.c
 	gcc -o nas nas.c nas.tab.c
 
 nas.c: nas.l
