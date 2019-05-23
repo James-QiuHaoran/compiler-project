@@ -11,20 +11,20 @@ Or, you can run `make all` to make all executables.
 
 This is a compiler for a simple programming lanaguage. c6 is based on c5, which has the following features:
 
-- Constants and variables (global & local)
-- Arithmetic compuations (`+`, `-`, `*`, `/`)
-- Logic expression (`AND`, `OR`, `>`, `<`, etc)
-- Control flow (`for`, `while`, `if`)
-- Functions (could be recursive)
-- I/O
+- Constants and variables (global & local);
+- Arithmetic compuations (`+`, `-`, `*`, `/`);
+- Logic expression (`AND`, `OR`, `>`, `<`, etc);
+- Control flow (`for`, `while`, `if`);
+- Functions (could be recursive);
+- I/O (`puts`, `puts_`, `putc`, `putc_`, `puti`, `puti_`);
 
 In addition, these features have been added to c6:
 
-- Control flow: `break` and `continue`;
+- Control flow: `break` and `continue`; [Bonus]
 - String functioning as other normal variables (assignment, comparison, print);
-- Multi-dimensional arrays;
-- String concatenation;
-- Reference (`*`) & Dereference (`&`);
+- Multi-dimensional arrays (any # of dimensions);
+- String concatenation; [Bonus]
+- Reference (`*`) & Dereference (`&`); [Bonus]
 
 ## Example programs
 
@@ -45,7 +45,7 @@ Run `make clean` to remove all intermediate or auxiliary files.
 
 ## Tests
 
-There are 15 tests in the `test` directory. To run them, simply execute `./run_tests.sh`. But make sure you've built the executables `c6c` and `nas`.
+There are 23 tests in the `test` and `test-c6` directory. To run them, simply execute `./run_tests.sh`. But make sure you've built the executables `c6c` and `nas`.
 
 ## Contact
 
