@@ -322,10 +322,10 @@ int ex(nodeType *p, int exType, int nops, ...) {
                     ex(p->opr.op[1], -1, 1, lbl_kept);
                     break;
                 case EQ:
-                    if (p->opr.op[1]->type == typeCon && p->opr.op[1]->con.type == varTypeStr ||
-                        p->opr.op[0]->type == typeCon && p->opr.op[0]->con.type == varTypeStr ||
-                        sm_exists(string_var_tab, p->opr.op[1]->id.varName) ||
-                        sm_exists(string_var_tab, p->opr.op[0]->id.varName)) {
+                    if ((p->opr.op[1]->type == typeCon && p->opr.op[1]->con.type == varTypeStr) ||
+                            (p->opr.op[0]->type == typeCon && p->opr.op[0]->con.type == varTypeStr) ||
+                            sm_exists(string_var_tab, p->opr.op[1]->id.varName) ||
+                            sm_exists(string_var_tab, p->opr.op[0]->id.varName)) {
                         // for string comparison
                         ex(p->opr.op[0], 0, 1, lbl_kept);
                         ex(p->opr.op[1], 0, 1, lbl_kept);
