@@ -9,7 +9,7 @@ Or, you can run `make all` to make all executables.
 
 ## Features
 
-This is a compiler for a simple programming lanaguage. c6 is based on c5, which has the following features:
+This is a compiler for a simple programming language. c6 is based on c5, which has the following features:
 
 - Constants and variables (global & local);
 - Arithmetic compuations (`+`, `-`, `*`, `/`);
@@ -25,6 +25,9 @@ In addition, these features have been added to c6:
 - Multi-dimensional arrays (any # of dimensions);
 - String concatenation; [Bonus]
 - Reference (`*`) & Dereference (`&`); [Bonus]
+
+Besides, the nas program is modified to support double number.
+Use putd to print double numbers. Use realdiv to divide double numbers.
 
 ## Example programs
 
