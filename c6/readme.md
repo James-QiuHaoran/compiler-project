@@ -49,5 +49,5 @@ There are 23 tests in the `test` and `test-c6` directory. To run them, simply ex
 
 ## Contact
 
-- Author: James, Qiu Haoran; Bob, Li Boxuan; Casper, Chen Cheng;
+- Author: James, Qiu Haoran; LI, Boxuan; Casper, Chen Cheng;
 - Email: jamesqiu@hku.hk; liboxuan@hku.hk; susume@hku.hk;
