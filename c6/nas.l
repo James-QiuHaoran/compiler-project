@@ -17,6 +17,12 @@ char text[500];
 		  yylval.i = atoi(yytext);
 		  return INT;
 		}
+
+-?[0-9]+\.[0-9]+	{
+            yylval.d = atof(yytext);
+            return DOUBLE;
+        }
+
 sb		{
 		  yylval.i = 0;
 		  return REG;
@@ -71,6 +77,7 @@ add		return ADD;
 sub		return SUB;
 mul		return MUL;
 div		return DIV;
+realdiv return REALDIV;
 mod		return MOD;
 neg		return NEG;
 and		return AND;
@@ -79,6 +86,7 @@ geti		return GETI;
 gets		return GETS;
 getc		return GETC;
 puti		return PUTI;
+putd        return PUTD;
 puts		return PUTS;
 putc		return PUTC;
 puti_		return PUTI_;

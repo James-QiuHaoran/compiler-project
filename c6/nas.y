@@ -42,7 +42,8 @@
   // max size of string is 500
 
   int pc; // program counter during assembly
-  long in[SIZE], op[SIZE], opx[SIZE]; // instructions and their operands
+  long in[SIZE], opx[SIZE]; // instructions and their operands
+  double op[SIZE];
   int lb[LABELS]; // labels[000..999]
 
   char *str;
@@ -51,12 +52,13 @@
 
 %union {
   int i;
+  double d;
   char s[500];
 }
 
-%token <i>INT <i>REG <i>LABEL PUSH POP LT GT GE LE NE EQ <s>STRING
-%token CALL RET END J0 J1 JMP ADD SUB MUL DIV MOD NEG AND OR
-%token GETI GETS GETC PUTI PUTS PUTC PUTI_ PUTS_ PUTC_
+%token <i>INT <d>DOUBLE <i>REG <i>LABEL PUSH POP LT GT GE LE NE EQ <s>STRING
+%token CALL RET END J0 J1 JMP ADD SUB MUL DIV REALDIV MOD NEG AND OR
+%token GETI GETS GETC PUTI PUTD PUTS PUTC PUTI_ PUTS_ PUTC_
 %nonassoc ':'
 
 %%
@@ -73,6 +75,7 @@ line:
 
 instruction:
 	PUSH INT	{ in[pc] = PUSHI; op[pc++] = $2; }
+	| PUSH DOUBLE { in[pc] = PUSHI; op[pc++] = $2; }
 	| PUSH STRING	{ 
 		in[pc] = PUSHI;
 		str = (char *) malloc(strlen($2)+1);
@@ -105,6 +108,7 @@ instruction:
 	| SUB		{ in[pc++] = SUB; }
 	| MUL		{ in[pc++] = MUL; }
 	| DIV		{ in[pc++] = DIV; }
+	| REALDIV	{ in[pc++] = REALDIV; }
 	| MOD		{ in[pc++] = MOD; }
 	| NEG		{ in[pc++] = NEG; }
 	| AND		{ in[pc++] = AND; }
@@ -113,6 +117,7 @@ instruction:
 	| GETS		{ in[pc++] = GETS; }
 	| GETC		{ in[pc++] = GETC; }
 	| PUTI		{ in[pc++] = PUTI; }
+	| PUTD      { in[pc++] = PUTD; }
 	| PUTI STRING	{
 		in[pc] = PUTIS;
 		str = (char *) malloc(strlen($2)+1);
@@ -143,7 +148,7 @@ void yyerror(char *s) {
 
 int main(int argc, char *argv[]) {
   //int st[ST_SIZE];
-  long st[ST_SIZE];
+  double st[ST_SIZE];
 
   SB = 0;
   FP = 0;
@@ -167,18 +172,18 @@ int main(int argc, char *argv[]) {
       case PUSHI:
 	st[SP] = op[i++]; ISP; break;
       case PUSHR:
-	st[SP] = reg[op[i++]]; ISP; break;
+	st[SP] = reg[(long) op[i++]]; ISP; break;
       case PUSHRI:
-	st[SP] = st[reg[op[i]] + opx[i]]; i++; ISP; break;
+	st[SP] = st[reg[(long) op[i]] + opx[i]]; i++; ISP; break;
 	// check sp pt errors here?
       case PUSHRR:
-	st[SP] = st[reg[op[i]] + reg[opx[i]]]; i++; ISP; break;
+	st[SP] = st[reg[(long) op[i]] + reg[opx[i]]]; i++; ISP; break;
       case POPR:
-	reg[op[i++]] = st[--SP]; break;
+	reg[(long) op[i++]] = st[--SP]; break;
       case POPRI:
-	st[reg[op[i]] + opx[i]] = st[--SP]; i++; break;
+	st[reg[(long) op[i]] + opx[i]] = st[--SP]; i++; break;
       case POPRR:
-	st[reg[op[i]] + reg[opx[i]]] = st[--SP]; i++; break;
+	st[reg[(long) op[i]] + reg[opx[i]]] = st[--SP]; i++; break;
 
       case CALL:
 	// save old SP
@@ -190,7 +195,7 @@ int main(int argc, char *argv[]) {
 	// set new FP
 	FP = SP;
 	// jump!
-	i = lb[op[i-1]];
+	i = lb[(long) op[i-1]];
 	break;
       case RET:
 	// keep return value
@@ -210,6 +215,7 @@ int main(int argc, char *argv[]) {
 	break;
 
 #define EVAL(opr) st[SP-2] = st[SP-2] opr st[SP-1]; SP--; i++; break;
+#define EVAL_LONG(opr) st[SP-2] = (long) st[SP-2] opr (long) st[SP-1]; SP--; i++; break;
 
       case LT: EVAL(<)
       case GT: EVAL(>)
@@ -220,20 +226,21 @@ int main(int argc, char *argv[]) {
       case ADD: EVAL(+)
       case SUB: EVAL(-)
       case MUL: EVAL(*)
-      case DIV: EVAL(/)
-      case MOD: EVAL(%)
+      case REALDIV: EVAL(/)
+      case DIV: EVAL_LONG(/)
+      case MOD: EVAL_LONG(%)
       case AND: EVAL(&&)
       case OR: EVAL(||)
       case NEG:
 	st[SP-1] = -st[SP-1]; i++; break;
       case J0:
-	i = st[--SP] ? i + 1 : lb[op[i]]; break;
+	i = st[--SP] ? i + 1 : lb[(long) op[i]]; break;
       case J1:
-	i = st[--SP] ? lb[op[i]] : i + 1; break;
+	i = st[--SP] ? lb[(long) op[i]] : i + 1; break;
       case JMP:
-	i = lb[op[i]]; break;
+	i = lb[(long) op[i]]; break;
       case GETI:
-	scanf("%ld", &st[SP]);
+	scanf("%lf", &st[SP]);
 	getchar(); // chew up the newline
 	i++; ISP; break;
       case GETS:
@@ -246,21 +253,23 @@ int main(int argc, char *argv[]) {
       case GETC:
 	st[SP] = getchar(); ISP; i++; break;
       case PUTI:
-	printf("%ld\n", st[--SP]); i++; break;
+	printf("%ld\n", (long) st[--SP]); i++; break;
+	  case PUTD:
+	printf("%f\n", st[--SP]); i++; break;
       case PUTIS:
-	printf((char *) op[i], st[--SP]); i++; break;
+	printf((char *) (long) op[i], st[--SP]); i++; break;
       case PUTS:
-	printf("%s\n", (char *) st[--SP]); i++; break;
+	printf("%s\n", (char *) (long) st[--SP]); i++; break;
       case PUTSS:
-	printf((char *) op[i], st[--SP]); i++; break;
+	printf((char *) (long) op[i], st[--SP]); i++; break;
       case PUTC:
 	putchar(st[--SP]); putchar('\n'); i++; break;
       case PUTCS:
-	printf((char *) op[i], st[--SP]); i++; break;
+	printf((char *) (long) op[i], st[--SP]); i++; break;
       case PUTI_:
-	printf("%ld", st[--SP]); i++; break;
+	printf("%ld", (long) st[--SP]); i++; break;
       case PUTS_:
-	printf("%s", (char *) st[--SP]); i++; break;
+	printf("%s", (char *) (long) st[--SP]); i++; break;
       case PUTC_:
 	putchar(st[--SP]); i++; break;
     }
