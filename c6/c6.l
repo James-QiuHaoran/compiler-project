@@ -57,6 +57,7 @@ char stringVarContent[STR_MAX_LEN]; // a string cannot exceed 1024 chars
 "<="                   return LE;
 "=="                   return EQ;
 "!="                   return NE;
+"realdiv"              return REALDIV;
 "for"                  return FOR;
 "while"                return WHILE;
 "break"                return BREAK;
@@ -67,6 +68,7 @@ char stringVarContent[STR_MAX_LEN]; // a string cannot exceed 1024 chars
 "getc"                 return GETC;
 "gets"                 return GETS;
 "puti"                 return PUTI;
+"putd"                 return PUTD;
 "putc"                 return PUTC;
 "puts"                 return PUTS;
 "puti_"                return PUTI_;

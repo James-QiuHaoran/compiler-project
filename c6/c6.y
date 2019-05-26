@@ -55,7 +55,7 @@ nodeLinkedListType* stmts;
 %token <intValue> INTEGER CHAR
 %token <strValue> STRING
 %token <sIndex> LEFT_VARIABLE RIGHT_VARIABLE
-%token FOR WHILE IF RETURN CALL GETI GETC GETS PUTI PUTC PUTS PUTI_ PUTC_ PUTS_
+%token FOR WHILE IF RETURN CALL GETI GETC GETS PUTI PUTD PUTC PUTS PUTI_ PUTC_ PUTS_
 %token CONTINUE BREAK
 %token ARRAY_DECL
 %nonassoc IFX
@@ -64,7 +64,7 @@ nodeLinkedListType* stmts;
 %left AND OR
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
-%left '*' '/' '%'
+%left '*' '/' REALDIV '%'
 %nonassoc UMINUS REF DEREF
 
 %type <nPtr> stmt expr stmt_list func params param variable args arg array assignment assignment_list arr_decl_list left_var arr_list
@@ -118,6 +118,7 @@ stmt:
         | GETC '(' left_var ')' ';'                        { $$ = opr(GETC, 1, $3); }
         | GETS '(' left_var ')' ';'                        { $$ = opr(GETS, 1, $3); }
         | PUTI '(' arg ')' ';'                             { $$ = opr(PUTI, 1, $3); }
+        | PUTD '(' arg ')' ';'                             { $$ = opr(PUTD, 1, $3); }
         | PUTI_ '(' arg ')' ';'                            { $$ = opr(PUTI_, 1, $3); }
         | PUTC '(' arg ')' ';'                             { $$ = opr(PUTC, 1, $3); }
         | PUTC_ '(' arg ')' ';'                            { $$ = opr(PUTC_, 1, $3); }
@@ -174,6 +175,7 @@ expr:
         | expr '/' expr                                    { $$ = opr('/', 2, $1, $3); }
         | expr '<' expr                                    { $$ = opr('<', 2, $1, $3); }
         | expr '>' expr                                    { $$ = opr('>', 2, $1, $3); }
+        | expr REALDIV expr                                { $$ = opr(REALDIV, 2, $1, $3); }
         | expr GE expr                                     { $$ = opr(GE, 2, $1, $3); }
         | expr LE expr                                     { $$ = opr(LE, 2, $1, $3); }
         | expr NE expr                                     { $$ = opr(NE, 2, $1, $3); }

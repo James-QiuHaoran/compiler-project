@@ -25,9 +25,9 @@ In addition, these features have been added to c6:
 - Multi-dimensional arrays (any # of dimensions);
 - String concatenation; [Bonus]
 - Reference (`*`) & Dereference (`&`); [Bonus]
-
-Besides, the nas program is modified to support double number.
-Use putd to print double numbers. Use realdiv to divide double numbers.
+- Floating number 'putd' and real division 'realdiv'; [Bonus] (nas
+program is modified to support floating number operations with backward
+compatibility)
 
 ## Example programs
 

@@ -216,7 +216,11 @@ int ex(nodeType *p, int exType, int nops, ...) {
                     ex(p->opr.op[0], -1, 1, lbl_kept);
                     if (!scanning) { fprintf(stdout, "\tputi_\n"); }
                     break;
-                case PUTC: 
+                case PUTD:
+                    ex(p->opr.op[0], -1, 1, lbl_kept);
+                    if (!scanning) { fprintf(stdout, "\tputd\n"); }
+                    break;
+                case PUTC:
                     ex(p->opr.op[0], -1, 1, lbl_kept);
                     if (!scanning) { fprintf(stdout, "\tputc\n"); }
                     break;
@@ -347,6 +351,7 @@ int ex(nodeType *p, int exType, int nops, ...) {
                         case '%': if (!scanning) fprintf(stdout, "\tmod\n"); break;
                         case '<': if (!scanning) fprintf(stdout, "\tcompLT\n"); break;
                         case '>': if (!scanning) fprintf(stdout, "\tcompGT\n"); break;
+                        case REALDIV: if (!scanning) fprintf(stdout, "\trealdiv\n"); break;
                         case GE:  if (!scanning) fprintf(stdout, "\tcompGE\n"); break;
                         case LE:  if (!scanning) fprintf(stdout, "\tcompLE\n"); break;
                         case NE:  if (!scanning) fprintf(stdout, "\tcompNE\n"); break;
