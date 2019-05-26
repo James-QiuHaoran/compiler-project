@@ -19,10 +19,8 @@ if (rows > maxRows) {
 
 // 2D floating point array of input
 array allIn[2000][256]; // maxRows x nips
-array in[256];
 // 2D floating point array of target
 array allTg[2000][10]; // maxRows x nops
-array tg[10];
 
 for (row = 0; row < rows; row = row + 1;) {
     cols = nips + nops;
@@ -40,7 +38,7 @@ for (row = 0; row < rows; row = row + 1;) {
 nb = 2;
 nw = nhid * (nips + nops);
 array w[7448]; // nhid * (nips + nops)
-x = &w[0] + nhid * nips;
+x = w + nhid * nips;
 array bias[2]; // nb
 array h[28]; // nhid
 array o[10]; // nops
