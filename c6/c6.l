@@ -24,6 +24,11 @@ char stringVarContent[STR_MAX_LEN]; // a string cannot exceed 1024 chars
                        return INTEGER;
                      }
 
+-?[0-9]+\.[0-9]+	 {
+                       yylval.doubleValue = atof(yytext);
+                       return DOUBLE;
+                     }
+
 ''                   { yylval.intValue = 0; return CHAR; }
 '\\n'                { yylval.intValue = (int) '\n'; return CHAR; }
 '\\t'                { yylval.intValue = (int) '\t'; return CHAR; }

@@ -69,6 +69,10 @@ int ex(nodeType *p, int exType, int nops, ...) {
                     // integer
                     if (!scanning) fprintf(stdout, "\tpush\t%d\n", p->con.value); 
                     break;
+                case varTypeDouble:
+                    // double
+                    if (!scanning) fprintf(stdout, "\tpush\t%f\n", p->con.doubleValue);
+                    break;
                 case varTypeChar:
                     // char
                     if (!scanning) fprintf(stdout, "\tpush\t\'%c\'\n", (char) p->con.value); 

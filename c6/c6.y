@@ -12,6 +12,7 @@ nodeType *opr(int oper, int nops, ...);
 nodeType *sopr(int oper, int nops, ...);
 nodeType *nameToNode(char* name);
 nodeType *var(long value, varTypeEnum type);
+nodeType *doubleVar(double value, varTypeEnum type);
 nodeType *arr(nodeType* id, nodeType *offset);
 nodeType *multiDimensionalizeArray(nodeType *p, nodeType *offset);
 nodeType *func(char* name, nodeType *args, nodeType *stmt);
@@ -47,12 +48,14 @@ nodeLinkedListType* stmts;
 
 %union {
     int intValue;               /* integer value (int | char) */
+    double doubleValue;         /* double */
     char strValue[STR_MAX_LEN]; /* const value (string) */
     char sIndex[VAR_NAME_LEN];  /* symbol table index */
     nodeType *nPtr;             /* node pointer */
 };
 
 %token <intValue> INTEGER CHAR
+%token <doubleValue> DOUBLE
 %token <strValue> STRING
 %token <sIndex> LEFT_VARIABLE RIGHT_VARIABLE
 %token FOR WHILE IF RETURN CALL GETI GETC GETS PUTI PUTD PUTC PUTS PUTI_ PUTC_ PUTS_
@@ -161,6 +164,7 @@ args:
 
 expr:
           INTEGER                                          { $$ = var($1, varTypeInt); }
+        | DOUBLE                                           { $$ = doubleVar($1, varTypeDouble); }
         | CHAR                                             { $$ = var($1, varTypeChar); }
         | variable                                         { $$ = $1; }
         | array                                            { $$ = $1; }
@@ -241,6 +245,23 @@ nodeType *var(long value, varTypeEnum type) {
 
     return p;
 }
+
+nodeType *doubleVar(double value, varTypeEnum type) {
+    nodeType *p;
+    size_t nodeSize;
+
+    /* allocate node */
+    nodeSize = SIZEOF_NODETYPE + sizeof(conNodeType);
+    if ((p = malloc(nodeSize)) == NULL)
+        yyerror("out of memory");
+
+    /* copy information */
+    p->type = typeCon;
+    p->con.type = type;
+    p->con.doubleValue = value;
+    return p;
+}
+
 
 nodeType *arr(nodeType* id, nodeType *offset) {
     nodeType *p;
