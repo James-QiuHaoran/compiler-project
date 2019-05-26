@@ -20,12 +20,12 @@ This is a compiler for a simple programming language. c6 is based on c5, which h
 
 In addition, these features have been added to c6:
 
-- Control flow: `break` and `continue`; [Bonus]
+- Control flow: `break` and `continue`; \[Bonus\]
 - String functioning as other normal variables (assignment, comparison, print);
 - Multi-dimensional arrays (any # of dimensions);
-- String concatenation; [Bonus]
-- Reference (`*`) & Dereference (`&`); [Bonus]
-- Floating number 'putd' and real division 'realdiv'; [Bonus] (nas
+- String concatenation; \[Bonus\]
+- Reference (`*`) & Dereference (`&`); \[Bonus\]
+- Floating number 'putd' and real division 'realdiv'; \[Bonus\] (nas
 program is modified to support floating number operations with backward
 compatibility)
 
