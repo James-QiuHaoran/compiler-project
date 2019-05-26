@@ -259,7 +259,8 @@ int ex(nodeType *p, int exType, int nops, ...) {
                                 // variable assignment
                                 StrMap* arr_dim_sym_tab = getArrDimSymTab();
                                 if (sm_exists(arr_dim_sym_tab, p->opr.op[0]->id.varName)) {
-                                    fprintf(stderr, "Variable cannot have the same name as the array declared [errno: %d]\n", errno);
+                                    fprintf(stderr, "Variable cannot have the same name (%s) as the array declared"
+                                                    "[errno: %d]\n", p->opr.op[0]->id.varName, errno);
                                     exit(1);
                                 }
                                 if (debug) printf("\t// variable assignment: %s\n", p->opr.op[0]->id.varName);
