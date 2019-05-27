@@ -12,27 +12,36 @@ Or, you can run `make all` to make all executables.
 This is a compiler for a simple programming language. c6 is based on c5, which has the following features:
 
 - Constants and variables (global & local);
+  - Demo: test/ta01.sc, test/tc01.sc, test/tc02.sc, test/tc03.sc, test/tc04.sc, test/tc12.sc;
 - Arithmetic compuations (`+`, `-`, `*`, `/`);
+  - Demo: test/tc05.sc, test-c6/tc02.sc;
 - Logic expression (`AND`, `OR`, `>`, `<`, etc);
+  - Demo: test/tc05.sc;
 - Control flow (`for`, `while`, `if`);
+  - Demo: test/tc05.sc, test/tc06.sc;
 - Functions (could be recursive);
+  - Demo: test/ta02.sc, test/tc07.sc, test/tc08.sc, test/tc09.sc, test/tc10.sc, test/tc11.sc, test-c6/tc06.sc;
 - I/O (`puts`, `puts_`, `putc`, `putc_`, `puti`, `puti_`);
+  - Demo: test/ta03.sc, test-c6/tc04.sc, test-c6/tc05.sc;
 
 In addition, these features have been added to c6:
 
 - Control flow: `break` and `continue`; \[Bonus\]
+  - Demo: test/tc06.sc;
 - String functioning as other normal variables (assignment, comparison, print);
+  - Demo: test-c6/tc01.sc;
 - Multi-dimensional arrays (any # of dimensions);
+  - Demo: test-c6/tc02.sc, test-c6/tc03.sc, test-c6/tc04.sc, test-c6/tc05.sc, test-c6/tc06.sc, test-c6/tc07.sc;
 - String concatenation; \[Bonus\]
+  - Demo: test-c6/tc05.sc;
 - Reference (`*`) & Dereference (`&`); \[Bonus\]
+  - Demo: test-c6/tc08.sc;
 - Floating number 'putd' and real division 'realdiv'; \[Bonus\]
-  - nas
-program is modified to support floating number operations with backward
-compatibility
+  - Demo: test-c6/tc09.sc;
+  - nas program is modified to support floating number operations with backward compatibility;
 - Random number 'rand(n)'; \[Bonus\]
-  - Demo: test-c6/tc11.sc
-  - nas program is modified to support
-random number functionality
+  - Demo: test-c6/tc11.sc;
+  - nas program is modified to support random number functionality;
 
 ## Environment
 
@@ -66,7 +75,7 @@ Run `make clean` to remove all intermediate or auxiliary files.
 
 ## Tests
 
-There are 25 tests in the `test` and `test-c6` directory. To run them, simply execute `./run_tests.sh`. But make sure you've built the executables `c6c` and `nas`.
+There are 26 tests in the `test` and `test-c6` directory. To run them, simply execute `./run_tests.sh`. But make sure you've built the executables `c6c` and `nas`.
 
 ## Contact
 
