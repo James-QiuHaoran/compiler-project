@@ -12,20 +12,24 @@ iterations = 128;
 // load training set
 puts("please enter number of samples");
 geti(rows);
+puts_("rows = ");
+puti(rows);
 maxRows = 2000;
 if (rows > maxRows) {
     puts("FATAL: no more than 2000 samples!");
 }
 
 // 2D floating point array of input
-array allIn[2000][256]; // maxRows x nips
+array allIn[10][256]; // maxRows x nips
 // 2D floating point array of target
-array allTg[2000][10]; // maxRows x nops
+array allTg[10][10]; // maxRows x nops
 
+cols = nips + nops;
 for (row = 0; row < rows; row = row + 1;) {
-    cols = nips + nops;
     for (col = 0; col < cols; col = col + 1;) {
         geti(val);
+        puts_("col = ");
+        puti(col);
         if (col < nips) {
             allIn[row][col] = val;
         } else {
@@ -33,6 +37,8 @@ for (row = 0; row < rows; row = row + 1;) {
         }
     }
 }
+
+puts("finish loading!");
 
 // Only support one hidden layer so there are two biases
 nb = 2;
@@ -81,7 +87,7 @@ pdActivate(a) {
 }
 
 // Performs back propagation.
-backwardProp() {
+backwardProp(in, tg) {
     for (i = 0; i < nhid; i = i + 1;) {
         sum = 0.0;
         // Calculate total error change with respect to output.
@@ -100,7 +106,7 @@ backwardProp() {
 }
 
 // Performs forward propagation.
-forwardProp() {
+forwardProp(in, tg) {
     // Calculate hidden layer neuron values.
     for (i = 0; i < nhid; i = i + 1;) {
         sum = 0.0;
@@ -136,9 +142,9 @@ predict() {
 }
 
 // Train a neural network
-train() {
-    forwardProp();
-    backwardProp();
+train(in, tg) {
+    forwardProp(in, tg);
+    backwardProp(in, tg);
     return totErr(tg, o, nops);
 }
 
@@ -151,7 +157,7 @@ for (i = 0; i < iterations; i = i + 1;) {
     for (j = 0; j < rows; j = j + 1;) {
         in = allIn[j];
         tg = allTg[j];
-        error = error + train();
+        error = error + train(in, tg);
     }
     puts_("error rate = ");
     putd(error realdiv rows);
