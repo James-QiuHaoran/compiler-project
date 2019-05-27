@@ -17,6 +17,7 @@ nodeType *arr(nodeType* id, nodeType *offset);
 nodeType *multiDimensionalizeArray(nodeType *p, nodeType *offset);
 nodeType *func(char* name, nodeType *args, nodeType *stmt);
 nodeType *strConcat(nodeType* str1, nodeType* str2);
+nodeType *str(nodeType* id, nodeType *offset);
 
 /* node management */
 void freeNode(nodeType *p);
@@ -70,7 +71,7 @@ nodeLinkedListType* stmts;
 %left '*' '/' REALDIV '%'
 %nonassoc UMINUS REF DEREF
 
-%type <nPtr> stmt expr stmt_list func params param variable args arg array assignment assignment_list arr_decl_list left_var arr_list
+%type <nPtr> stmt expr stmt_list func params param variable args arg array assignment assignment_list arr_decl_list left_var arr_list str_decl str_list
 
 %%
 
@@ -106,7 +107,6 @@ variable:
 left_var:
           variable                                         { $$ = $1; }
         | array                                            { $$ = $1; }
-	| string					   { $$ = $1; }
         | '*' expr %prec DEREF                             { $$ = opr(DEREF, 1, $2); }
         ;
 
@@ -213,7 +213,7 @@ arr_list:
         ;
 
 str_decl:
-	STRING_DECL LEFT_VARIABLE '[' expr ']' '=' STRING	{ $$ = opr('=', 2, opr(STRING_DECL, 1, nameToNode($2)), $4); }
+	STRING_DECL str_list '=' STRING	{ $$ = opr('=', 2, $2, $4); }
 	; 
 
 str_list:

@@ -10,7 +10,7 @@
 #define LOCAL_TAB_SIZE 256
 #define FUNC_TAB_SIZE 256
 
-#define STRING_LIST_SIZE 14
+#define STR_LIST_SIZE 14
 
 #define STR_HASH_LEN 4
 

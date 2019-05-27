@@ -15,6 +15,12 @@ static int flevel = 0;    // current function call level
 
 static int debug = 0;     // 1 for debugging mode and 0 otherwise
 
+char strNames[STR_LIST_SIZE][VAR_NAME_LEN];
+int sb_fp[STR_LIST_SIZE];	// 0 means sb, 1 means fp
+int start_index[STR_LIST_SIZE];
+int end_index[STR_LIST_SIZE];
+int curSize = 0;
+
 /* program init & end functions */
 void init();
 void end();
@@ -51,7 +57,10 @@ int ex(nodeType *p, int exType, int nops, ...) {
     char labelName[LBL_NAME_LEN];
     int num_args;
 
-    char strNames[STR_LIST_SIZE][VAR_NAME_LEN];
+    int regType;
+    int starting; 
+    int ending;
+    int ind;
 
     // retrieve lbl_kept
     va_list ap;
@@ -128,6 +137,17 @@ int ex(nodeType *p, int exType, int nops, ...) {
                 pushPtrValue(p, lbl_kept);
             }
             break;
+	case typeStr:
+	    getStrRegisters(regType&, starting&, ending&, p->str.name, p->str.size);
+	    if (regType==0){
+		strcpy(reg, "sb");
+	    }else{
+		strcpy(reg, "fp");
+	    }
+	    for (int i=starting; i<=ending; i++){
+		fprintf(stdout, "\tpush\t%s[%d]\n", reg, i);
+	    }
+	    break;
         // operators
         case typeOpr:
             switch(p->opr.oper) {
@@ -487,6 +507,101 @@ int getHash(char* name) {
         }
     } else {
         return -1;
+    }
+}
+
+int findStrName(char* variable){
+	for (int i=0; i<curSize; i++){
+		if (strcmp(strNames[i],variable)==0){
+			return i;
+		}
+	}
+	return -1;
+}
+
+int getStrRegisters(int* regType, int* starting, int* ending, char* name, int size){
+    if (flevel == 0) {
+	ind  = findStrName(name);
+	if (ind>=0){
+		*regType = sb_fp[ind];
+		*starting = start_index[ind];
+		*end = end_index[ind];
+		return 1;
+	}else{
+            if (size <= 0) {
+                fprintf(stderr, "Wrong size [errno: %d], name = %s\n", errno, name);
+                exit(1);
+            }
+	    strcpy(strNames[curSize], name);
+
+	    *regType = 0;
+	    sb_fp[curSize] = 0;
+
+	    *starting = global_sym_tab->size;
+	    start_index[curSize] = *starting;
+
+	    global_sym_tab->size += size;
+	    *end = global_sym_tab->size;
+	    end_index[curSize] = *end;
+	    curSize++;
+            return 0;	    
+	}
+    } else if (name[0] == '$') {
+	ind = findStrName(name+1);
+        // declare global variables inside a function
+        if (ind>=0) {
+            *regType = sb_fp[ind];
+	    *starting = start_index[ind];
+	    *end = end_index[ind];
+            return 1;
+        } else {
+            if (size <= 0) {
+                fprintf(stderr, "Wrong size [errno: %d]\n", errno);
+                exit(1);
+            }
+	    strcpy(strNames[curSize], name);
+
+	    *regType = 0;
+	    sb_fp[curSize] = 0;
+
+	    *starting = global_sym_tab->size;
+	    start_index[curSize] = *starting;
+
+	    global_sym_tab->size += size;
+	    *end = global_sym_tab->size;
+	    end_index[curSize] = *end;
+	    curSize++;
+            return 0;	
+        }
+    } else {
+	ind  = findStrName(name);
+        // first lookup whether the variable exists in local symbol table
+	if (ind>=0){
+	    *regType = sb_fp[ind];
+	    *starting = start_index[ind];
+	    *end = end_index[ind];
+            return 1;
+	} else {
+            // otherwise create the local variable in the local table
+            if (size <= 0) {
+                fprintf(stderr, "Wrong size [errno: %d], name = %s\n", errno, name);
+                exit(1);
+            }
+	    
+	    strcpy(strNames[curSize], name);
+
+	    *regType = 1;
+	    sb_fp[curSize] = 1;
+
+	    *starting = local_sym_tab->size;
+	    start_index[curSize] = *starting;
+
+	    local_sym_tab->size += size;
+	    *end = local_sym_tab->size;
+	    end_index[curSize] = *end;
+	    curSize++;	    
+            return 0;	    
+	}
     }
 }
 
