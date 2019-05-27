@@ -7,7 +7,7 @@ nops = 10;
 rate = 1.0;
 nhid = 28;
 anneal = 0.99;
-iterations = 128;
+iterations = 2;
 
 // load training set
 puts("please enter number of samples");
@@ -74,22 +74,36 @@ totErr(tg) {
     return sum;
 }
 
-max(a, b) {
-    if (a > b) {
-        return a;
-    } else {
-        return b;
-    }
+// Returns approximate value of e^x
+// using sum of first n terms of Taylor Series
+exp(x) {
+    n = 10; // use first n terms
+
+    sum = 1.0; // initialize sum of series
+
+    for (i = n - 1; i > 0; i = i - 1;)
+        sum = 1 + x * sum realdiv i;
+
+    return sum;
 }
 
-// ReLu activation function
+// sigmoid activation function
 activate(a) {
-    return max(0, a);
+    return 1.0 realdiv (1.0 + exp(-a));
 }
 
 // returns partial derivative of activation function
 pdActivate(a) {
-    return 1;
+    return a * (1.0 - a);
+}
+
+// print out weights
+printWeights() {
+    puts("printing out weights...");
+    for (i = 0; i < nw; i = i + 1;) {
+        putd(w[i]);
+    }
+    puts("finish printing out weights");
 }
 
 // Performs back propagation.
@@ -113,6 +127,7 @@ backwardProp(in, tg) {
 
 // Performs forward propagation.
 forwardProp(in, tg) {
+    puts("forward propagation");
     // Calculate hidden layer neuron values.
     for (i = 0; i < nhid; i = i + 1;) {
         sum = 0.0;
@@ -120,6 +135,10 @@ forwardProp(in, tg) {
             sum = sum + in[j] * w[i * nips + j];
         }
         h[i] = activate(sum + bias[0]);
+        puts_("h[");
+        puti_(i);
+        puts_("]=");
+        putd(h[i]);
     }
     // Calculate output layer neuron values.
     for (i = 0; i < nops; i = i + 1;)
@@ -128,8 +147,11 @@ forwardProp(in, tg) {
         for (j = 0; j < nhid; j = j + 1;)
             sum = sum + h[j] * *(x + i * nhid + j);
         o[i] = activate(sum + bias[1]);
+        puts_("o[");
+        puti_(i);
+        puts_("]=");
+        putd(o[i]);
     }
-    return o;
 }
 
 randomize() {
@@ -150,7 +172,9 @@ predict() {
 // Train a neural network
 train(in, tg) {
     forwardProp(in, tg);
+    // printWeights();
     backwardProp(in, tg);
+    // printWeights();
     return totErr(tg);
 }
 
