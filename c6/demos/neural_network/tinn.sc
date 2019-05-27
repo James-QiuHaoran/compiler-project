@@ -94,9 +94,9 @@ backwardProp(in, tg) {
         for (j = 0; j < nops; j = j + 1;) {
             a = pdErr(o[j], tg[j]);
             b = pdActivate(o[j]);
-            sum = sum + a * b * x[j * nhid + i];
+            sum = sum + a * b * *(x + j * nhid + i);
             // Correct weights in hidden to output layer.
-            x[j * nhid + i] = x[j * nhid + i] - rate * a * b * h[i];
+            *(x + j * nhid + i) = *(x + j * nhid + i) - rate * a * b * h[i];
         }
         // Correct weights in input to hidden layer.
         for (j = 0; j < nips; j = j + 1;) {
@@ -120,7 +120,7 @@ forwardProp(in, tg) {
     {
         sum = 0.0;
         for (j = 0; j < nhid; j = j + 1;)
-            sum = sum + h[j] * x[i * nhid + j];
+            sum = sum + h[j] * *(x + i * nhid + j);
         o[i] = activate(sum + bias[1]);
     }
     return o;
