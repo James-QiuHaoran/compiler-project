@@ -1,3 +1,5 @@
+debugMode = 0;
+
 // prepare
 
 // number of inputs
@@ -7,7 +9,7 @@ nops = 10;
 rate = 1.0;
 nhid = 28;
 anneal = 0.99;
-iterations = 2;
+iterations = 128;
 
 // load training set
 puts("please enter number of samples");
@@ -58,17 +60,20 @@ pdErr(a, b) {
 
 // compute total error of target to output.
 totErr(tg) {
-    puts("calculate total error");
+    if (debugMode == 1)
+        puts("calculate total error");
     sum = 0.0;
     for (errIt = 0; errIt < nops; errIt = errIt + 1;) {
-        puts_("o[");
-        puti_(errIt);
-        puts_("]=");
-        putd(o[errIt]);
-        puts_("tg[");
-        puti_(errIt);
-        puts_("]=");
-        putd(tg[errIt]);
+        if (debugMode == 1) {
+            puts_("o[");
+            puti_(errIt);
+            puts_("]=");
+            putd(o[errIt]);
+            puts_("tg[");
+            puti_(errIt);
+            puts_("]=");
+            putd(tg[errIt]);
+        }
         sum = sum + err(tg[errIt], o[errIt]);
     }
     return sum;
@@ -77,18 +82,24 @@ totErr(tg) {
 // Returns approximate value of e^x
 // using sum of first n terms of Taylor Series
 exp(x) {
-    n = 10; // use first n terms
+    n = 100; // use first n terms
 
     sum = 1.0; // initialize sum of series
 
     for (i = n - 1; i > 0; i = i - 1;)
-        sum = 1 + x * sum realdiv i;
+        sum = 1 + (x * sum) realdiv i;
 
     return sum;
 }
 
 // sigmoid activation function
 activate(a) {
+    if (debugMode == 1) {
+        puts_("sigmoid input =");
+        putd(a);
+        puts_("sigmoid output =");
+        putd(1.0 realdiv (1.0 + exp(-a)));
+    }
     return 1.0 realdiv (1.0 + exp(-a));
 }
 
@@ -127,7 +138,8 @@ backwardProp(in, tg) {
 
 // Performs forward propagation.
 forwardProp(in, tg) {
-    puts("forward propagation");
+    if (debugMode == 1)
+        puts("forward propagation");
     // Calculate hidden layer neuron values.
     for (i = 0; i < nhid; i = i + 1;) {
         sum = 0.0;
@@ -135,10 +147,12 @@ forwardProp(in, tg) {
             sum = sum + in[j] * w[i * nips + j];
         }
         h[i] = activate(sum + bias[0]);
-        puts_("h[");
-        puti_(i);
-        puts_("]=");
-        putd(h[i]);
+        if (debugMode == 1) {
+            puts_("h[");
+            puti_(i);
+            puts_("]=");
+            putd(h[i]);
+        }
     }
     // Calculate output layer neuron values.
     for (i = 0; i < nops; i = i + 1;)
@@ -147,10 +161,12 @@ forwardProp(in, tg) {
         for (j = 0; j < nhid; j = j + 1;)
             sum = sum + h[j] * *(x + i * nhid + j);
         o[i] = activate(sum + bias[1]);
-        puts_("o[");
-        puti_(i);
-        puts_("]=");
-        putd(o[i]);
+        if (debugMode == 1) {
+            puts_("o[");
+            puti_(i);
+            puts_("]=");
+            putd(o[i]);
+        }
     }
 }
 
