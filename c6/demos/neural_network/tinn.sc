@@ -204,9 +204,9 @@ for (k = 0; k < iterations; k = k + 1;) {
     puti(k);
     // shuffle();
     error = 0.0;
-    for (j = 0; j < rows; j = j + 1;) {
-        in = allIn[j];
-        tg = allTg[j];
+    for (rowIter = 0; rowIter < rows; rowIter = rowIter + 1;) {
+        in = allIn[rowIter];
+        tg = allTg[rowIter];
         error = error + train(in, tg);
     }
     puts_("error rate = ");
@@ -220,8 +220,10 @@ correctCount = 0;
 
 // do prediction
 for (iter = 0; iter < rows; iter = iter + 1;) {
-    puts_("Test case #");
-    puti(iter);
+    if (debugMode == 1) {
+        puts_("Test case #");
+        puti(iter);
+    }
 
     in = allIn[iter];
     tg = allTg[iter];
@@ -245,16 +247,16 @@ for (iter = 0; iter < rows; iter = iter + 1;) {
             predictValue = k;
         }
     }
-    puts_("Real value = ");
-    puti(realValue);
-    puts_("Predicted value = ");
-    puti(predictValue);
 
     if (realValue == predictValue)
         correctCount = correctCount + 1;
 
     // print out result vectors
     if (debugMode == 1) {
+        puts_("Real value = ");
+        puti(realValue);
+        puts_("Predicted value = ");
+        puti(predictValue);
         puts("Real value:");
         for (k = 0; k < nops; k = k + 1;) {
             putd(*(tg + k));
