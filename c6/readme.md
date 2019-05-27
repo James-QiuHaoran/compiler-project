@@ -37,7 +37,7 @@ In addition, these features have been added to c6:
 - Reference (`*`) & Dereference (`&`); \[Bonus\]
   - Demo: test-c6/tc08.sc;
 - Floating number 'putd' and real division 'realdiv'; \[Bonus\]
-  - Demo: test-c6/tc09.sc;
+  - Demo: test-c6/tc09.sc, test-c6/tc10.sc
   - nas program is modified to support floating number operations with backward compatibility;
 - Random number 'rand(n)'; \[Bonus\]
   - Demo: test-c6/tc11.sc;
@@ -49,11 +49,7 @@ All the implementation, test cases, sample programs, and demos are developed und
 
 ## Example programs
 
-There are three sample programs in the directory `sample_progs`:
-
-- fact.sc - factorial
-- rev-c.sc - string-reverse
-- max.sc - picking the max from two numbers
+Example programs are under `demos`, `sample_progs`, `test`, `test-c6` folders
 
 ## Demos
 
@@ -79,5 +75,6 @@ There are 26 tests in the `test` and `test-c6` directory. To run them, simply ex
 
 ## Contact
 
-- Author: James, Qiu Haoran; LI, Boxuan; Casper, Chen Cheng;
-- Email: jamesqiu@hku.hk; liboxuan@hku.hk; susume@hku.hk;
+- James, Qiu Haoran (jamesqiu@connect.hku.hk)
+- LI, Boxuan (liboxuan@connect.hku.hk)
+- Caspar, Chen Cheng (susume@connect.hku.hk)
