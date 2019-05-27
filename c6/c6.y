@@ -58,7 +58,7 @@ nodeLinkedListType* stmts;
 %token <doubleValue> DOUBLE
 %token <strValue> STRING
 %token <sIndex> LEFT_VARIABLE RIGHT_VARIABLE
-%token FOR WHILE IF RETURN CALL GETI GETC GETS PUTI PUTD PUTC PUTS PUTI_ PUTC_ PUTS_
+%token FOR WHILE IF RETURN CALL GETI GETC GETS PUTI PUTD PUTC PUTS PUTI_ PUTC_ PUTS_ RAND
 %token CONTINUE BREAK
 %token ARRAY_DECL
 %nonassoc IFX
@@ -191,6 +191,7 @@ expr:
         | expr OR expr                                     { $$ = opr(OR, 2, $1, $3); }
         | '(' expr ')'                                     { $$ = $2; }
         | RIGHT_VARIABLE '(' args ')'                      { $$ = opr(CALL, 2, nameToNode($1), $3); }
+        | RAND '(' expr ')'                             { $$ = opr(RAND, 1, $3); }
         ;
 
 arr_decl_list:

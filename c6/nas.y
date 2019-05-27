@@ -3,6 +3,7 @@
 
 %{
   #include <stdlib.h>
+  #include <time.h>
   #include <stdio.h>
   #include <string.h>
   #include <errno.h>
@@ -58,7 +59,7 @@
 
 %token <i>INT <d>DOUBLE <i>REG <i>LABEL PUSH POP LT GT GE LE NE EQ <s>STRING
 %token CALL RET END J0 J1 JMP ADD SUB MUL DIV REALDIV MOD NEG AND OR
-%token GETI GETS GETC PUTI PUTD PUTS PUTC PUTI_ PUTS_ PUTC_
+%token GETI GETS GETC PUTI PUTD PUTS PUTC PUTI_ PUTS_ PUTC_ RAND
 %nonassoc ':'
 
 %%
@@ -130,6 +131,7 @@ instruction:
 		strcpy(str, $2); op[pc++] = (long) str;
 	}
 	| PUTC		{ in[pc++] = PUTC; }
+	| RAND      { in[pc++] = RAND; }
 	| PUTC STRING	{
 		in[pc] = PUTCS;
 		str = (char *) malloc(strlen($2)+1);
@@ -147,6 +149,7 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]) {
+  srand(time(NULL));
   //int st[ST_SIZE];
   double st[ST_SIZE];
 
@@ -264,6 +267,8 @@ int main(int argc, char *argv[]) {
 	printf((char *) (long) op[i], st[--SP]); i++; break;
       case PUTC:
 	putchar(st[--SP]); putchar('\n'); i++; break;
+	  case RAND:
+    st[SP-1] = rand() % (long) st[SP-1]; i++; break;
       case PUTCS:
 	printf((char *) (long) op[i], st[--SP]); i++; break;
       case PUTI_:

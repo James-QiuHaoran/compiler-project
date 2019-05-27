@@ -25,9 +25,14 @@ In addition, these features have been added to c6:
 - Multi-dimensional arrays (any # of dimensions);
 - String concatenation; \[Bonus\]
 - Reference (`*`) & Dereference (`&`); \[Bonus\]
-- Floating number 'putd' and real division 'realdiv'; \[Bonus\] (nas
+- Floating number 'putd' and real division 'realdiv'; \[Bonus\]
+  - nas
 program is modified to support floating number operations with backward
-compatibility)
+compatibility
+- Random number 'rand(n)'; \[Bonus\]
+  - Demo: test-c6/tc11.sc
+  - nas program is modified to support
+random number functionality
 
 ## Example programs
 

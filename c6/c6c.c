@@ -252,6 +252,10 @@ int ex(nodeType *p, int exType, int nops, ...) {
                         putCharArray(p->opr.op[0], 0, lbl_kept);
                     }
                     break;
+                case RAND:
+                    ex(p->opr.op[0], -1, 1, lbl_kept);
+                    if (!scanning) { fprintf(stdout, "\trand\n"); }
+                    break;
                 case '=':
                     if (p->opr.op[0]->type != typeOpr) {
                         if (!isArrayPtr(p->opr.op[0]) || p->opr.op[1]->type != typeCon || p->opr.op[1]->con.type != varTypeStr) {
