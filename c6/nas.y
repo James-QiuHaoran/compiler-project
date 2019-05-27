@@ -3,6 +3,7 @@
 
 %{
   #include <stdlib.h>
+  #include <time.h>
   #include <stdio.h>
   #include <string.h>
   #include <errno.h>
@@ -24,15 +25,15 @@
 
   extern FILE* yyin;
 
-  int reg[4]; // 0 - sb; 1 - fp; 2 - ac/in; 3 - sp
+  long reg[4]; // 0 - sb; 1 - fp; 2 - ac/in; 3 - sp
   #define SB reg[0]
   #define FP reg[1]
   #define IN reg[2]
   #define SP reg[3]
 
-  #define SIZE 20000 // max code size
-  #define LABELS 1000
-  #define ST_SIZE 20000 // max stack size
+  #define SIZE 5000000 // max code size
+  #define LABELS 500000
+  #define ST_SIZE 1000000 // max stack size
 
   // Increment SP and check
   // #define ISP if (++SP >= ST_SIZE) error(1, 0, "Stack overflow!")
@@ -41,10 +42,10 @@
 
   // max size of string is 500
 
-  int pc; // program counter during assembly
+  long pc; // program counter during assembly
   long in[SIZE], opx[SIZE]; // instructions and their operands
   double op[SIZE];
-  int lb[LABELS]; // labels[000..999]
+  long lb[LABELS];
 
   char *str;
 %}
@@ -58,7 +59,7 @@
 
 %token <i>INT <d>DOUBLE <i>REG <i>LABEL PUSH POP LT GT GE LE NE EQ <s>STRING
 %token CALL RET END J0 J1 JMP ADD SUB MUL DIV REALDIV MOD NEG AND OR
-%token GETI GETS GETC PUTI PUTD PUTS PUTC PUTI_ PUTS_ PUTC_
+%token GETI GETS GETC PUTI PUTD PUTS PUTC PUTI_ PUTS_ PUTC_ RAND
 %nonassoc ':'
 
 %%
@@ -130,6 +131,7 @@ instruction:
 		strcpy(str, $2); op[pc++] = (long) str;
 	}
 	| PUTC		{ in[pc++] = PUTC; }
+	| RAND      { in[pc++] = RAND; }
 	| PUTC STRING	{
 		in[pc] = PUTCS;
 		str = (char *) malloc(strlen($2)+1);
@@ -147,6 +149,7 @@ void yyerror(char *s) {
 }
 
 int main(int argc, char *argv[]) {
+  srand(time(NULL));
   //int st[ST_SIZE];
   double st[ST_SIZE];
 
@@ -154,8 +157,8 @@ int main(int argc, char *argv[]) {
   FP = 0;
   SP = 0;
 
-  int i = 0; // the pc used by the execution
-  int temp;
+  long i = 0; // the pc used by the execution
+  double temp;
 
   char buf[500];
 
@@ -211,7 +214,7 @@ int main(int argc, char *argv[]) {
 	break;
 
       case END:
-	i = 99999999;
+	i = 999999999999;
 	break;
 
 #define EVAL(opr) st[SP-2] = st[SP-2] opr st[SP-1]; SP--; i++; break;
@@ -264,6 +267,8 @@ int main(int argc, char *argv[]) {
 	printf((char *) (long) op[i], st[--SP]); i++; break;
       case PUTC:
 	putchar(st[--SP]); putchar('\n'); i++; break;
+	  case RAND:
+    st[SP-1] = rand() % (long) st[SP-1]; i++; break;
       case PUTCS:
 	printf((char *) (long) op[i], st[--SP]); i++; break;
       case PUTI_:

@@ -79,6 +79,7 @@ char stringVarContent[STR_MAX_LEN]; // a string cannot exceed 1024 chars
 "puti_"                return PUTI_;
 "putc_"                return PUTC_;
 "puts_"                return PUTS_;
+"rand"                 return RAND;
 "&&"                   return AND;
 "||"                   return OR;
 "return"               return RETURN;

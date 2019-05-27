@@ -259,6 +259,10 @@ int ex(nodeType *p, int exType, int nops, ...) {
                         putCharArray(p->opr.op[0], 0, lbl_kept);
                     }
                     break;
+                case RAND:
+                    ex(p->opr.op[0], -1, 1, lbl_kept);
+                    if (!scanning) { fprintf(stdout, "\trand\n"); }
+                    break;
                 case '=':
                     if (p->opr.op[0]->type != typeOpr) {
                         if (!isArrayPtr(p->opr.op[0]) || p->opr.op[1]->type != typeCon || p->opr.op[1]->con.type != varTypeStr) {
@@ -336,8 +340,20 @@ int ex(nodeType *p, int exType, int nops, ...) {
                     break;
                 case CALL:
                     num_args = pushArgsOnStack(p->opr.op[1], lbl_kept);
-                    getLabel(labelName, p->opr.op[0]->id.varName);
-                    if (!scanning) { fprintf(stdout, "\tcall\t%s, %d\n", labelName, num_args); }
+                    int ret = getLabel(labelName, p->opr.op[0]->id.varName);
+		    // error checking
+                    if (ret == -1) {
+                        // function name the same as the variable declared
+                        fprintf(stderr, "Function cannot have the same name as the variable declared [errno: %d]\n", errno);
+                        exit(1);
+                    } else if (ret == 1) {
+                        // function has been declared
+                        if (!scanning) { fprintf(stdout, "\tcall\t%s, %d\n", labelName, num_args); }
+		    } else if (ret != 0) {
+                        // unknown functions
+                        fprintf(stderr, "Undeclared functions [errno: %d]\n", errno);
+                        exit(1);
+                    }
                     break;
                 case RETURN:
                     ex(p->opr.op[0], -1, 1, lbl_kept);
@@ -428,7 +444,7 @@ void execute() {
         } else if (ret == 1) {
             // function has been declared
             fprintf(stdout, "%s:\n", label);
-        } else {
+        } else if (ret != 0) {
             // unknown functions
             fprintf(stderr, "Undeclared functions [errno: %d]\n", errno);
             exit(1);
@@ -483,7 +499,7 @@ int getRegister(char* reg, char* name, int size) {
             return 1;
         } else {
             if (size <= 0) {
-                fprintf(stderr, "Wrong size [errno: %d]\n", errno);
+                fprintf(stderr, "Wrong size [errno: %d], reg = %s, name = %s\n", errno, reg, name);
                 exit(1);
             }
             sprintf(reg, "sb[%d]", global_sym_tab->size); // sm_get_count(global_sym_tab->symbol_table));
@@ -518,7 +534,7 @@ int getRegister(char* reg, char* name, int size) {
         } else {
             // otherwise create the local variable in the local table
             if (size <= 0) {
-                fprintf(stderr, "Wrong size [errno: %d]\n", errno);
+                fprintf(stderr, "Wrong size [errno: %d], reg = %s, name = %s\n", errno, reg, name);
                 exit(1);
             }
             sprintf(reg, "fp[%d]", local_sym_tab->num_local_vars++);

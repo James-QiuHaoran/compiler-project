@@ -92,6 +92,7 @@ putc		return PUTC;
 puti_		return PUTI_;
 puts_		return PUTS_;
 putc_		return PUTC_;
+rand        return RAND;
 [; \t\n]+	;
 "//".*\n	;
 .		yyerror("Unknown character");
