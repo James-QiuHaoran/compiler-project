@@ -463,7 +463,7 @@ int getRegister(char* reg, char* name, int size) {
             return 1;
         } else {
             if (size <= 0) {
-                fprintf(stderr, "Wrong size [errno: %d]\n", errno);
+                fprintf(stderr, "Wrong size [errno: %d], reg = %s, name = %s\n", errno, reg, name);
                 exit(1);
             }
             sprintf(reg, "sb[%d]", global_sym_tab->size); // sm_get_count(global_sym_tab->symbol_table));
@@ -498,7 +498,7 @@ int getRegister(char* reg, char* name, int size) {
         } else {
             // otherwise create the local variable in the local table
             if (size <= 0) {
-                fprintf(stderr, "Wrong size [errno: %d]\n", errno);
+                fprintf(stderr, "Wrong size [errno: %d], reg = %s, name = %s\n", errno, reg, name);
                 exit(1);
             }
             sprintf(reg, "fp[%d]", local_sym_tab->num_local_vars++);
