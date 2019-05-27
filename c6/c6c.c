@@ -51,6 +51,8 @@ int ex(nodeType *p, int exType, int nops, ...) {
     char labelName[LBL_NAME_LEN];
     int num_args;
 
+    char strNames[STR_LIST_SIZE][VAR_NAME_LEN];
+
     // retrieve lbl_kept
     va_list ap;
     va_start(ap, nops);
@@ -83,7 +85,12 @@ int ex(nodeType *p, int exType, int nops, ...) {
                         // for string comparison
                         if (!scanning) fprintf(stdout, "\tpush\t%d\n", p->con.strValueHash);    
                     } else {
-                        if (!scanning) fprintf(stdout, "\tpush\t\"%s\"\n", p->con.strValue); 
+                        if (!scanning){
+				for (int i=0; i<strlen(p->con.strValue); i++){
+					fprintf(stdout, "\tpush\t\'%c\'\n", p->con.strValue[i]); 					
+				}
+				fprintf(stdout, "\tpush\t%d\n", strlen(p->con.strValue));
+			} 
                     }
                     break;
                 case varTypeNil:
@@ -255,7 +262,20 @@ int ex(nodeType *p, int exType, int nops, ...) {
                 case '=':
                     if (p->opr.op[0]->type != typeOpr) {
                         if (!isArrayPtr(p->opr.op[0]) || p->opr.op[1]->type != typeCon || p->opr.op[1]->con.type != varTypeStr) {
-                            if (p->opr.op[0]->type == typeId) {
+			    if (p->opr.op[0]->type == typeStr){
+                                // string assignment
+                                StrMap* arr_dim_sym_tab = getArrDimSymTab();
+                                if (sm_exists(arr_dim_sym_tab, p->opr.op[0]->id.varName)) {
+                                    fprintf(stderr, "Variable cannot have the same name (%s) as the array declared"
+                                                    "[errno: %d]\n", p->opr.op[0]->id.varName, errno);
+                                    exit(1);
+                                }
+                                if (debug) printf("\t// variable assignment: %s\n", p->opr.op[0]->id.varName);
+                                getRegister(reg, p->opr.op[0]->id.varName, 1);
+                                ex(p->opr.op[1], -1, 1, lbl_kept);
+                                if (!scanning) { fprintf(stdout, "\tpop\t%s\n", reg); }
+			    }
+                            else if (p->opr.op[0]->type == typeId) {
                                 // variable assignment
                                 StrMap* arr_dim_sym_tab = getArrDimSymTab();
                                 if (sm_exists(arr_dim_sym_tab, p->opr.op[0]->id.varName)) {

@@ -60,7 +60,7 @@ nodeLinkedListType* stmts;
 %token <sIndex> LEFT_VARIABLE RIGHT_VARIABLE
 %token FOR WHILE IF RETURN CALL GETI GETC GETS PUTI PUTD PUTC PUTS PUTI_ PUTC_ PUTS_
 %token CONTINUE BREAK
-%token ARRAY_DECL
+%token ARRAY_DECL STRING_DECL
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -106,6 +106,7 @@ variable:
 left_var:
           variable                                         { $$ = $1; }
         | array                                            { $$ = $1; }
+	| string					   { $$ = $1; }
         | '*' expr %prec DEREF                             { $$ = opr(DEREF, 1, $2); }
         ;
 
@@ -139,6 +140,7 @@ stmt:
         | RETURN STRING ';'                                { $$ = opr(RETURN, 1, var((long) $2, varTypeStr)); }
         | '{' stmt_list '}'                                { $$ = $2; }
         | arr_decl_list ';'                                { $$ = $1; }
+	| str_decl ';'					   { $$ = $1; }
         ;
 
 assignment:
@@ -209,6 +211,14 @@ arr_list:
         | arr_list ']' '[' expr                            { $$ = multiDimensionalizeArray($1, $4); }
         ;
 
+str_decl:
+	STRING_DECL LEFT_VARIABLE '[' expr ']' '=' STRING	{ $$ = opr('=', 2, opr(STRING_DECL, 1, nameToNode($2)), $4); }
+	; 
+
+str_list:
+	variable '[' expr ']'	{ $$ = str($1, $3); }
+	;
+
 %%
 
 #define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
@@ -260,6 +270,22 @@ nodeType *doubleVar(double value, varTypeEnum type) {
     p->con.type = type;
     p->con.doubleValue = value;
     return p;
+}
+
+nodeType *str(nodeType* id, nodeType *offset){
+    nodeType *p;
+    size_t nodeSize;
+
+    /* allocate node */
+    nodeSize = SIZEOF_NODETYPE + sizeof(strNodeType);
+    if ((p = malloc(nodeSize)) == NULL)
+        yyerror("out of memory");
+
+    /* copy information */
+    p->type = typeStr;
+    strcpy(p->str.name, id->id.varName);
+    p->str.size = offset->con.value;
+    return p;	
 }
 
 
