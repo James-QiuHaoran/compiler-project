@@ -37,6 +37,13 @@ There are three sample programs in the directory `sample_progs`:
 - rev-c.sc - string-reverse
 - max.sc - picking the max from two numbers
 
+## Demos
+
+There are two demos in the directory `demos`:
+
+- Tic-Tac-Toe
+- Tiny Neural Network
+
 ## To run the compiler
 
 ```
@@ -48,7 +55,7 @@ Run `make clean` to remove all intermediate or auxiliary files.
 
 ## Tests
 
-There are 23 tests in the `test` and `test-c6` directory. To run them, simply execute `./run_tests.sh`. But make sure you've built the executables `c6c` and `nas`.
+There are 25 tests in the `test` and `test-c6` directory. To run them, simply execute `./run_tests.sh`. But make sure you've built the executables `c6c` and `nas`.
 
 ## Contact
 
