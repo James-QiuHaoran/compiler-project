@@ -61,9 +61,9 @@ pdErr(a, b) {
 }
 
 // compute total error of target to output.
-totErr(tg, o, size) {
+totErr(tg) {
     sum = 0.0;
-    for (i = 0; i < size; i = i + 1;)
+    for (i = 0; i < nops; i = i + 1;)
         sum = sum + err(tg[i], o[i]);
     return sum;
 }
@@ -145,7 +145,7 @@ predict() {
 train(in, tg) {
     forwardProp(in, tg);
     backwardProp(in, tg);
-    return totErr(tg, o, nops);
+    return totErr(tg);
 }
 
 randomize();
