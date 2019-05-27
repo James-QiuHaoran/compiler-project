@@ -1,3 +1,5 @@
+debugMode = 0;
+
 // prepare
 
 // number of inputs
@@ -7,7 +9,7 @@ nops = 10;
 rate = 1.0;
 nhid = 28;
 anneal = 0.99;
-iterations = 2;
+iterations = 128;
 
 // load training set
 puts("please enter number of samples");
@@ -18,9 +20,9 @@ if (rows > maxRows) {
 }
 
 // 2D floating point array of input
-array allIn[10][256]; // maxRows x nips
+array allIn[2000][256]; // maxRows x nips
 // 2D floating point array of target
-array allTg[10][10]; // maxRows x nops
+array allTg[2000][10]; // maxRows x nops
 
 cols = nips + nops;
 for (row = 0; row < rows; row = row + 1;) {
@@ -58,18 +60,21 @@ pdErr(a, b) {
 
 // compute total error of target to output.
 totErr(tg) {
-    puts("calculate total error");
+    if (debugMode == 1)
+        puts("calculate total error");
     sum = 0.0;
     for (errIt = 0; errIt < nops; errIt = errIt + 1;) {
-        puts_("o[");
-        puti_(errIt);
-        puts_("]=");
-        putd(o[errIt]);
-        puts_("tg[");
-        puti_(errIt);
-        puts_("]=");
-        putd(tg[errIt]);
-        sum = sum + err(tg[errIt], o[errIt]);
+        if (debugMode == 1) {
+            puts_("o[");
+            puti_(errIt);
+            puts_("]=");
+            putd(o[errIt]);
+            puts_("tg[");
+            puti_(errIt);
+            puts_("]=");
+            putd(*(tg + errIt));
+        }
+        sum = sum + err(*(tg + errIt), o[errIt]);
     }
     return sum;
 }
@@ -77,18 +82,24 @@ totErr(tg) {
 // Returns approximate value of e^x
 // using sum of first n terms of Taylor Series
 exp(x) {
-    n = 10; // use first n terms
+    n = 100; // use first n terms
 
     sum = 1.0; // initialize sum of series
 
     for (i = n - 1; i > 0; i = i - 1;)
-        sum = 1 + x * sum realdiv i;
+        sum = 1 + (x * sum) realdiv i;
 
     return sum;
 }
 
 // sigmoid activation function
 activate(a) {
+    if (debugMode == 1) {
+        puts_("sigmoid input =");
+        putd(a);
+        puts_("sigmoid output =");
+        putd(1.0 realdiv (1.0 + exp(-a)));
+    }
     return 1.0 realdiv (1.0 + exp(-a));
 }
 
@@ -112,7 +123,7 @@ backwardProp(in, tg) {
         sum = 0.0;
         // Calculate total error change with respect to output.
         for (j = 0; j < nops; j = j + 1;) {
-            a = pdErr(o[j], tg[j]);
+            a = pdErr(o[j], *(tg + j));
             b = pdActivate(o[j]);
             sum = sum + a * b * *(x + j * nhid + i);
             // Correct weights in hidden to output layer.
@@ -120,25 +131,28 @@ backwardProp(in, tg) {
         }
         // Correct weights in input to hidden layer.
         for (j = 0; j < nips; j = j + 1;) {
-            w[i * nips + j] = w[i * nips + j] - rate * sum * pdActivate(h[i]) * in[j];
+            w[i * nips + j] = w[i * nips + j] - rate * sum * pdActivate(h[i]) * *(in + j);
         }
     }
 }
 
 // Performs forward propagation.
-forwardProp(in, tg) {
-    puts("forward propagation");
+forwardProp(in) {
+    if (debugMode == 1)
+        puts("forward propagation");
     // Calculate hidden layer neuron values.
     for (i = 0; i < nhid; i = i + 1;) {
         sum = 0.0;
         for (j = 0; j < nips; j = j + 1;) {
-            sum = sum + in[j] * w[i * nips + j];
+            sum = sum + *(in + j) * w[i * nips + j];
         }
         h[i] = activate(sum + bias[0]);
-        puts_("h[");
-        puti_(i);
-        puts_("]=");
-        putd(h[i]);
+        if (debugMode == 1) {
+            puts_("h[");
+            puti_(i);
+            puts_("]=");
+            putd(h[i]);
+        }
     }
     // Calculate output layer neuron values.
     for (i = 0; i < nops; i = i + 1;)
@@ -147,10 +161,12 @@ forwardProp(in, tg) {
         for (j = 0; j < nhid; j = j + 1;)
             sum = sum + h[j] * *(x + i * nhid + j);
         o[i] = activate(sum + bias[1]);
-        puts_("o[");
-        puti_(i);
-        puts_("]=");
-        putd(o[i]);
+        if (debugMode == 1) {
+            puts_("o[");
+            puti_(i);
+            puts_("]=");
+            putd(o[i]);
+        }
     }
 }
 
@@ -165,16 +181,18 @@ randomize() {
 }
 
 // Returns an output prediction given an input.
-predict() {
-    forwardProp();
+predict(in) {
+    forwardProp(in);
 }
 
 // Train a neural network
 train(in, tg) {
-    forwardProp(in, tg);
-    // printWeights();
+    forwardProp(in);
+    if (debugMode == 1)
+        printWeights();
     backwardProp(in, tg);
-    // printWeights();
+    if (debugMode == 1)
+        printWeights();
     return totErr(tg);
 }
 
@@ -197,3 +215,61 @@ for (k = 0; k < iterations; k = k + 1;) {
     putd(rate);
     rate = rate * anneal;
 }
+
+correctCount = 0;
+
+// do prediction
+for (iter = 0; iter < rows; iter = iter + 1;) {
+    puts_("Test case #");
+    puti(iter);
+
+    in = allIn[iter];
+    tg = allTg[iter];
+    predict(in);
+
+    // get real result
+    max = 0;
+    realValue = 0;
+    for (k = 0; k < nops; k = k + 1;) {
+        if (*(tg + k) > max) {
+            max = *(tg + k);
+            realValue = k;
+        }
+    }
+    // get predicted result
+    max = 0;
+    predictValue = 0;
+    for (k = 0; k < nops; k = k + 1;) {
+        if (o[k] > max) {
+            max = o[k];
+            predictValue = k;
+        }
+    }
+    puts_("Real value = ");
+    puti(realValue);
+    puts_("Predicted value = ");
+    puti(predictValue);
+
+    if (realValue == predictValue)
+        correctCount = correctCount + 1;
+
+    // print out result vectors
+    if (debugMode == 1) {
+        puts("Real value:");
+        for (k = 0; k < nops; k = k + 1;) {
+            putd(*(tg + k));
+        }
+        puts("Predicted value:");
+        for (k = 0; k < nops; k = k + 1;) {
+            putd(o[k]);
+        }
+    }
+}
+
+puts("######### Result #########");
+puts_("Number of correct predictions = ");
+puti(correctCount);
+puts_("Number of wrong predictions = ");
+puti(rows - correctCount);
+puts_("Prediction accuracy = ");
+putd(correctCount realdiv rows);
