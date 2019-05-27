@@ -25,34 +25,34 @@
 	push	sb[7]
 	push	sb[8]
 	compGT
-	j0	L075
+	j0	L074
 	push	"FATAL: no more than 2000 samples!"
 	puts
-L075:
+L074:
 	push	sb[1]
 	push	sb[2]
 	add
 	pop	sb[532009]
 	push	0
 	pop	sb[532010]
-L078:
+L077:
 	push	sb[532010]
 	push	sb[7]
 	compLT
-	j0	L077
+	j0	L076
 	push	0
 	pop	sb[532011]
-L081:
+L080:
 	push	sb[532011]
 	push	sb[532009]
 	compLT
-	j0	L080
+	j0	L079
 	geti
 	pop	sb[532012]
 	push	sb[532011]
 	push	sb[1]
 	compLT
-	j0	L082
+	j0	L081
 	push	sb[532012]
 	push	sb
 	push	9
@@ -67,8 +67,8 @@ L081:
 	add
 	pop	ac
 	pop	ac[0]
-	jmp	L083
-L082:
+	jmp	L082
+L081:
 	push	sb[532012]
 	push	sb
 	push	512009
@@ -85,21 +85,21 @@ L082:
 	add
 	pop	ac
 	pop	ac[0]
-L083:
-L079:
+L082:
+L078:
 	push	sb[532011]
 	push	1
 	add
 	pop	sb[532011]
-	jmp	L081
-L080:
-L076:
+	jmp	L080
+L079:
+L075:
 	push	sb[532010]
 	push	1
 	add
 	pop	sb[532010]
-	jmp	L078
-L077:
+	jmp	L077
+L076:
 	push	"finish loading!"
 	puts
 	push	2
@@ -121,11 +121,11 @@ L077:
 	call	L006, 0
 	push	0
 	pop	sb[539504]
-L086:
+L085:
 	push	sb[539504]
 	push	sb[6]
 	compLT
-	j0	L085
+	j0	L084
 	push	"training iteration: #"
 	puts_
 	push	sb[539504]
@@ -134,11 +134,11 @@ L086:
 	pop	sb[539505]
 	push	0
 	pop	sb[539506]
-L089:
+L088:
 	push	sb[539506]
 	push	sb[7]
 	compLT
-	j0	L088
+	j0	L087
 	push	sb
 	push	9
 	push	0
@@ -165,13 +165,13 @@ L089:
 	call	L013, 2
 	add
 	pop	sb[539505]
-L087:
+L086:
 	push	sb[539506]
 	push	1
 	add
 	pop	sb[539506]
-	jmp	L089
-L088:
+	jmp	L088
+L087:
 	push	"error rate = "
 	puts_
 	push	sb[539505]
@@ -186,31 +186,31 @@ L088:
 	push	sb[5]
 	mul
 	pop	sb[3]
-L084:
+L083:
 	push	sb[539504]
 	push	1
 	add
 	pop	sb[539504]
-	jmp	L086
-L085:
+	jmp	L085
+L084:
 	push	0
 	pop	sb[539509]
 	push	0
 	pop	sb[539510]
-L092:
+L091:
 	push	sb[539510]
 	push	sb[7]
 	compLT
-	j0	L091
+	j0	L090
 	push	sb[0]
 	push	1
 	compEQ
-	j0	L093
+	j0	L092
 	push	"Test case #"
 	puts_
 	push	sb[539510]
 	puti
-L093:
+L092:
 	push	sb
 	push	9
 	push	0
@@ -239,11 +239,11 @@ L093:
 	pop	sb[539512]
 	push	0
 	pop	sb[539504]
-L096:
+L095:
 	push	sb[539504]
 	push	sb[2]
 	compLT
-	j0	L095
+	j0	L094
 	push	sb[539508]
 	push	sb[539504]
 	add
@@ -251,7 +251,7 @@ L096:
 	push	ac[0]
 	push	sb[539511]
 	compGT
-	j0	L097
+	j0	L096
 	push	sb[539508]
 	push	sb[539504]
 	add
@@ -260,25 +260,25 @@ L096:
 	pop	sb[539511]
 	push	sb[539504]
 	pop	sb[539512]
-L097:
-L094:
+L096:
+L093:
 	push	sb[539504]
 	push	1
 	add
 	pop	sb[539504]
-	jmp	L096
-L095:
+	jmp	L095
+L094:
 	push	0
 	pop	sb[539511]
 	push	0
 	pop	sb[539513]
 	push	0
 	pop	sb[539504]
-L100:
+L099:
 	push	sb[539504]
 	push	sb[2]
 	compLT
-	j0	L099
+	j0	L098
 	push	sb
 	push	539494
 	push	0
@@ -290,7 +290,7 @@ L100:
 	push	ac[0]
 	push	sb[539511]
 	compGT
-	j0	L101
+	j0	L100
 	push	sb
 	push	539494
 	push	0
@@ -303,27 +303,27 @@ L100:
 	pop	sb[539511]
 	push	sb[539504]
 	pop	sb[539513]
-L101:
-L098:
+L100:
+L097:
 	push	sb[539504]
 	push	1
 	add
 	pop	sb[539504]
-	jmp	L100
-L099:
+	jmp	L099
+L098:
 	push	sb[539512]
 	push	sb[539513]
 	compEQ
-	j0	L102
+	j0	L101
 	push	sb[539509]
 	push	1
 	add
 	pop	sb[539509]
-L102:
+L101:
 	push	sb[0]
 	push	1
 	compEQ
-	j0	L103
+	j0	L102
 	push	"Real value = "
 	puts_
 	push	sb[539512]
@@ -336,33 +336,33 @@ L102:
 	puts
 	push	0
 	pop	sb[539504]
-L106:
+L105:
 	push	sb[539504]
 	push	sb[2]
 	compLT
-	j0	L105
+	j0	L104
 	push	sb[539508]
 	push	sb[539504]
 	add
 	pop	ac
 	push	ac[0]
 	putd
-L104:
+L103:
 	push	sb[539504]
 	push	1
 	add
 	pop	sb[539504]
-	jmp	L106
-L105:
+	jmp	L105
+L104:
 	push	"Predicted value:"
 	puts
 	push	0
 	pop	sb[539504]
-L109:
+L108:
 	push	sb[539504]
 	push	sb[2]
 	compLT
-	j0	L108
+	j0	L107
 	push	sb
 	push	539494
 	push	0
@@ -373,21 +373,21 @@ L109:
 	pop	ac
 	push	ac[0]
 	putd
-L107:
+L106:
 	push	sb[539504]
 	push	1
 	add
 	pop	sb[539504]
-	jmp	L109
-L108:
-L103:
-L090:
+	jmp	L108
+L107:
+L102:
+L089:
 	push	sb[539510]
 	push	1
 	add
 	pop	sb[539510]
-	jmp	L092
-L091:
+	jmp	L091
+L090:
 	push	"######### Result #########"
 	puts
 	push	"Number of correct predictions = "
@@ -425,7 +425,7 @@ L047:
 	sub
 	ret
 	ret
-L074:
+L073:
 	push	sp
 	push	4
 	add
@@ -433,23 +433,23 @@ L074:
 	push	sb[0]
 	push	1
 	compEQ
-	j0	L110
+	j0	L109
 	push	"calculate total error"
 	puts
-L110:
+L109:
 	push	0.000000
 	pop	fp[0]
 	push	0
 	pop	fp[2]
-L113:
+L112:
 	push	fp[2]
 	push	sb[2]
 	compLT
-	j0	L112
+	j0	L111
 	push	sb[0]
 	push	1
 	compEQ
-	j0	L114
+	j0	L113
 	push	"o["
 	puts_
 	push	fp[2]
@@ -478,7 +478,7 @@ L113:
 	pop	ac
 	push	ac[0]
 	putd
-L114:
+L113:
 	push	fp[0]
 	push	fp[-4]
 	push	fp[2]
@@ -497,13 +497,13 @@ L114:
 	call	L033, 2
 	add
 	pop	fp[0]
-L111:
+L110:
 	push	fp[2]
 	push	1
 	add
 	pop	fp[2]
-	jmp	L113
-L112:
+	jmp	L112
+L111:
 	push	fp[0]
 	ret
 	ret
@@ -520,11 +520,11 @@ L037:
 	push	1
 	sub
 	pop	fp[4]
-L117:
+L116:
 	push	fp[4]
 	push	0
 	compGT
-	j0	L116
+	j0	L115
 	push	1
 	push	fp[-4]
 	push	fp[2]
@@ -533,13 +533,13 @@ L117:
 	realdiv
 	add
 	pop	fp[2]
-L115:
+L114:
 	push	fp[4]
 	push	1
 	sub
 	pop	fp[4]
-	jmp	L117
-L116:
+	jmp	L116
+L115:
 	push	fp[2]
 	ret
 	ret
@@ -547,7 +547,7 @@ L058:
 	push	sb[0]
 	push	1
 	compEQ
-	j0	L118
+	j0	L117
 	push	"sigmoid input ="
 	puts_
 	push	fp[-4]
@@ -562,7 +562,7 @@ L058:
 	add
 	realdiv
 	putd
-L118:
+L117:
 	push	1.000000
 	push	1.000000
 	push	fp[-4]
@@ -580,7 +580,6 @@ L048:
 	mul
 	ret
 	ret
-L072:
 	push	sp
 	push	2
 	add
@@ -614,7 +613,7 @@ L120:
 	push	"finish printing out weights"
 	puts
 	ret
-L073:
+L072:
 	push	sp
 	push	10
 	add
@@ -1001,7 +1000,14 @@ L148:
 	push	sb[532014]
 	compLT
 	j0	L147
-	push	0.100000
+	push	100000
+	rand
+	push	1.000000
+	push	100000
+	realdiv
+	mul
+	push	0.500000
+	sub
 	push	sb
 	push	532015
 	push	0
@@ -1025,7 +1031,14 @@ L151:
 	push	sb[532013]
 	compLT
 	j0	L150
-	push	0.100000
+	push	100000
+	rand
+	push	1.000000
+	push	100000
+	realdiv
+	mul
+	push	0.500000
+	sub
 	push	sb
 	push	539464
 	push	0
@@ -1050,22 +1063,14 @@ L017:
 L013:
 	push	fp[-5]
 	call	L071, 1
-	push	sb[0]
-	push	1
-	compEQ
-	j0	L152
-	call	L072, 0
-L152:
 	push	fp[-5]
 	push	fp[-4]
-	call	L073, 2
-	push	sb[0]
-	push	1
-	compEQ
-	j0	L153
-	call	L072, 0
-L153:
+	call	L072, 2
 	push	fp[-4]
-	call	L074, 1
+	call	L073, 1
+	ret
+	ret
+	push	fp[-4]
+	rand
 	ret
 	ret

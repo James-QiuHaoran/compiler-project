@@ -47,7 +47,10 @@ There are three sample programs in the directory `sample_progs`:
 There are two demos in the directory `demos`:
 
 - Tic-Tac-Toe
-- Tiny Neural Network
+- Neural Network
+    - Consisting of a library and a test program (hand-written digit
+    recognition)
+    - For details, refer to demos/neural_network/readme.md
 
 ## To run the compiler
 

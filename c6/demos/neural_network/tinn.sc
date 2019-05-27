@@ -1,3 +1,5 @@
+// Some components are modified from https://github.com/glouw/tinn
+
 debugMode = 0;
 
 // prepare
@@ -155,8 +157,7 @@ forwardProp(in) {
         }
     }
     // Calculate output layer neuron values.
-    for (i = 0; i < nops; i = i + 1;)
-    {
+    for (i = 0; i < nops; i = i + 1;) {
         sum = 0.0;
         for (j = 0; j < nhid; j = j + 1;)
             sum = sum + h[j] * *(x + i * nhid + j);
@@ -171,12 +172,12 @@ forwardProp(in) {
 }
 
 randomize() {
-    // nas does not support random number, so we initialize them to a fixed number
+    // simulate a normal distribution
     for (i = 0; i < nw; i = i + 1;) {
-        w[i] = 0.1;
+        w[i] = rand(100000) * (1.0 realdiv 100000) - 0.5;
     }
     for (i = 0; i < nb; i = i + 1;) {
-        bias[i] = 0.1;
+        bias[i] = rand(100000) * (1.0 realdiv 100000) - 0.5;
     }
 }
 
@@ -188,12 +189,15 @@ predict(in) {
 // Train a neural network
 train(in, tg) {
     forwardProp(in);
-    if (debugMode == 1)
-        printWeights();
+    // printWeights();
     backwardProp(in, tg);
-    if (debugMode == 1)
-        printWeights();
+    // printWeights();
     return totErr(tg);
+}
+
+// generate a random integer [0, n)
+random(n) {
+    return rand(n);
 }
 
 randomize();
@@ -202,7 +206,6 @@ randomize();
 for (k = 0; k < iterations; k = k + 1;) {
     puts_("training iteration: #");
     puti(k);
-    // shuffle();
     error = 0.0;
     for (rowIter = 0; rowIter < rows; rowIter = rowIter + 1;) {
         in = allIn[rowIter];
