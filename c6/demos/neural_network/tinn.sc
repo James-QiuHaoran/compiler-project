@@ -152,7 +152,9 @@ randomize();
 
 // start training
 for (i = 0; i < iterations; i = i + 1;) {
-    shuffle();
+    puts_("training iteration: #");
+    puti(i);
+    // shuffle();
     error = 0.0;
     for (j = 0; j < rows; j = j + 1;) {
         in = allIn[j];
