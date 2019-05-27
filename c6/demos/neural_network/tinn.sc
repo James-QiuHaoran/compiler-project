@@ -12,8 +12,6 @@ iterations = 128;
 // load training set
 puts("please enter number of samples");
 geti(rows);
-puts_("rows = ");
-puti(rows);
 maxRows = 2000;
 if (rows > maxRows) {
     puts("FATAL: no more than 2000 samples!");
@@ -28,8 +26,6 @@ cols = nips + nops;
 for (row = 0; row < rows; row = row + 1;) {
     for (col = 0; col < cols; col = col + 1;) {
         geti(val);
-        puts_("col = ");
-        puti(col);
         if (col < nips) {
             allIn[row][col] = val;
         } else {
@@ -62,9 +58,19 @@ pdErr(a, b) {
 
 // compute total error of target to output.
 totErr(tg) {
+    puts("calculate total error");
     sum = 0.0;
-    for (i = 0; i < nops; i = i + 1;)
-        sum = sum + err(tg[i], o[i]);
+    for (errIt = 0; errIt < nops; errIt = errIt + 1;) {
+        puts_("o[");
+        puti_(errIt);
+        puts_("]=");
+        putd(o[errIt]);
+        puts_("tg[");
+        puti_(errIt);
+        puts_("]=");
+        putd(tg[errIt]);
+        sum = sum + err(tg[errIt], o[errIt]);
+    }
     return sum;
 }
 
@@ -151,9 +157,9 @@ train(in, tg) {
 randomize();
 
 // start training
-for (i = 0; i < iterations; i = i + 1;) {
+for (k = 0; k < iterations; k = k + 1;) {
     puts_("training iteration: #");
-    puti(i);
+    puti(k);
     // shuffle();
     error = 0.0;
     for (j = 0; j < rows; j = j + 1;) {

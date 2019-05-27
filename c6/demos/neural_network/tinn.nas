@@ -18,47 +18,39 @@
 	puts
 	geti
 	pop	sb[6]
-	push	"rows = "
-	puts_
-	push	sb[6]
-	puti
 	push	2000
 	pop	sb[7]
 	push	sb[6]
 	push	sb[7]
 	compGT
-	j0	L053
+	j0	L052
 	push	"FATAL: no more than 2000 samples!"
 	puts
-L053:
+L052:
 	push	sb[0]
 	push	sb[1]
 	add
 	pop	sb[2668]
 	push	0
 	pop	sb[2669]
-L056:
+L055:
 	push	sb[2669]
 	push	sb[6]
 	compLT
-	j0	L055
+	j0	L054
 	push	0
 	pop	sb[2670]
-L059:
+L058:
 	push	sb[2670]
 	push	sb[2668]
 	compLT
-	j0	L058
+	j0	L057
 	geti
 	pop	sb[2671]
-	push	"col = "
-	puts_
-	push	sb[2670]
-	puti
 	push	sb[2670]
 	push	sb[0]
 	compLT
-	j0	L060
+	j0	L059
 	push	sb[2671]
 	push	sb
 	push	8
@@ -73,8 +65,8 @@ L059:
 	add
 	pop	ac
 	pop	ac[0]
-	jmp	L061
-L060:
+	jmp	L060
+L059:
 	push	sb[2671]
 	push	sb
 	push	2568
@@ -91,21 +83,21 @@ L060:
 	add
 	pop	ac
 	pop	ac[0]
-L061:
-L057:
+L060:
+L056:
 	push	sb[2670]
 	push	1
 	add
 	pop	sb[2670]
-	jmp	L059
-L058:
-L054:
+	jmp	L058
+L057:
+L053:
 	push	sb[2669]
 	push	1
 	add
 	pop	sb[2669]
-	jmp	L056
-L055:
+	jmp	L055
+L054:
 	push	"finish loading!"
 	puts
 	push	2
@@ -127,21 +119,24 @@ L055:
 	call	L006, 0
 	push	0
 	pop	sb[10163]
-L064:
+L063:
 	push	sb[10163]
 	push	sb[5]
 	compLT
-	j0	L063
-	call	L010, 0
+	j0	L062
+	push	"training iteration: #"
+	puts_
+	push	sb[10163]
+	puti
 	push	0.000000
 	pop	sb[10164]
 	push	0
 	pop	sb[10165]
-L067:
+L066:
 	push	sb[10165]
 	push	sb[6]
 	compLT
-	j0	L066
+	j0	L065
 	push	sb
 	push	8
 	push	0
@@ -165,16 +160,16 @@ L067:
 	push	sb[10164]
 	push	sb[10166]
 	push	sb[10167]
-	call	L014, 2
+	call	L013, 2
 	add
 	pop	sb[10164]
-L065:
+L064:
 	push	sb[10165]
 	push	1
 	add
 	pop	sb[10165]
-	jmp	L067
-L066:
+	jmp	L066
+L065:
 	push	"error rate = "
 	puts_
 	push	sb[10164]
@@ -189,15 +184,15 @@ L066:
 	push	sb[4]
 	mul
 	pop	sb[2]
-L062:
+L061:
 	push	sb[10163]
 	push	1
 	add
 	pop	sb[10163]
-	jmp	L064
-L063:
+	jmp	L063
+L062:
 	end
-L018:
+L017:
 	push	0.500000
 	push	fp[-5]
 	push	fp[-4]
@@ -209,100 +204,132 @@ L018:
 	mul
 	ret
 	ret
-L026:
+L025:
 	push	fp[-5]
 	push	fp[-4]
 	sub
-	ret
-	ret
-L052:
-	push	sp
-	push	2
-	add
-	pop	sp
-	push	0.000000
-	pop	fp[0]
-	push	0
-	pop	sb[10163]
-L070:
-	push	sb[10163]
-	push	sb[1]
-	compLT
-	j0	L069
-	push	fp[0]
-	push	fp[-4]
-	push	0
-	push	sb[10163]
-	add
-	add
-	pop	ac
-	push	ac[0]
-	push	sb
-	push	10153
-	push	0
-	push	sb[10163]
-	add
-	add
-	add
-	pop	ac
-	push	ac[0]
-	call	L018, 2
-	add
-	pop	fp[0]
-L068:
-	push	sb[10163]
-	push	1
-	add
-	pop	sb[10163]
-	jmp	L070
-L069:
-	push	fp[0]
-	ret
-	ret
-L019:
-	push	fp[-5]
-	push	fp[-4]
-	compGT
-	j0	L071
-	push	fp[-5]
-	ret
-	jmp	L072
-L071:
-	push	fp[-4]
-	ret
-L072:
-	ret
-L037:
-	push	0
-	push	fp[-4]
-	call	L019, 2
-	ret
-	ret
-L027:
-	push	1
 	ret
 	ret
 L051:
 	push	sp
-	push	6
+	push	4
 	add
 	pop	sp
-	push	0
-	pop	sb[10163]
-L075:
-	push	sb[10163]
-	push	sb[3]
-	compLT
-	j0	L074
+	push	"calculate total error"
+	puts
 	push	0.000000
 	pop	fp[0]
 	push	0
+	pop	fp[2]
+L069:
+	push	fp[2]
+	push	sb[1]
+	compLT
+	j0	L068
+	push	"o["
+	puts_
+	push	fp[2]
+	puti_
+	push	"]="
+	puts_
+	push	sb
+	push	10153
+	push	0
+	push	fp[2]
+	add
+	add
+	add
+	pop	ac
+	push	ac[0]
+	putd
+	push	"tg["
+	puts_
+	push	fp[2]
+	puti_
+	push	"]="
+	puts_
+	push	fp[-4]
+	push	0
+	push	fp[2]
+	add
+	add
+	pop	ac
+	push	ac[0]
+	putd
+	push	fp[0]
+	push	fp[-4]
+	push	0
+	push	fp[2]
+	add
+	add
+	pop	ac
+	push	ac[0]
+	push	sb
+	push	10153
+	push	0
+	push	fp[2]
+	add
+	add
+	add
+	pop	ac
+	push	ac[0]
+	call	L017, 2
+	add
+	pop	fp[0]
+L067:
+	push	fp[2]
+	push	1
+	add
+	pop	fp[2]
+	jmp	L069
+L068:
+	push	fp[0]
+	ret
+	ret
+L018:
+	push	fp[-5]
+	push	fp[-4]
+	compGT
+	j0	L070
+	push	fp[-5]
+	ret
+	jmp	L071
+L070:
+	push	fp[-4]
+	ret
+L071:
+	ret
+L036:
+	push	0
+	push	fp[-4]
+	call	L018, 2
+	ret
+	ret
+L026:
+	push	1
+	ret
+	ret
+L050:
+	push	sp
+	push	8
+	add
+	pop	sp
+	push	0
+	pop	fp[0]
+L074:
+	push	fp[0]
+	push	sb[3]
+	compLT
+	j0	L073
+	push	0.000000
+	pop	fp[2]
+	push	0
 	pop	sb[10165]
-L078:
+L077:
 	push	sb[10165]
 	push	sb[1]
 	compLT
-	j0	L077
+	j0	L076
 	push	sb
 	push	10153
 	push	0
@@ -319,8 +346,8 @@ L078:
 	add
 	pop	ac
 	push	ac[0]
-	call	L026, 2
-	pop	fp[2]
+	call	L025, 2
+	pop	fp[4]
 	push	sb
 	push	10153
 	push	0
@@ -330,50 +357,42 @@ L078:
 	add
 	pop	ac
 	push	ac[0]
-	call	L027, 1
-	pop	fp[4]
-	push	fp[0]
+	call	L026, 1
+	pop	fp[6]
 	push	fp[2]
 	push	fp[4]
+	push	fp[6]
 	mul
-	push	sb
-	push	10122
-	push	0
+	push	sb[10122]
 	push	sb[10165]
 	push	sb[3]
 	mul
-	push	sb[10163]
 	add
-	add
-	add
+	push	fp[0]
 	add
 	pop	ac
 	push	ac[0]
 	mul
 	add
-	pop	fp[0]
-	push	sb
-	push	10122
-	push	0
+	pop	fp[2]
+	push	sb[10122]
 	push	sb[10165]
 	push	sb[3]
 	mul
-	push	sb[10163]
 	add
-	add
-	add
+	push	fp[0]
 	add
 	pop	ac
 	push	ac[0]
 	push	sb[2]
-	push	fp[2]
-	mul
 	push	fp[4]
+	mul
+	push	fp[6]
 	mul
 	push	sb
 	push	10125
 	push	0
-	push	sb[10163]
+	push	fp[0]
 	add
 	add
 	add
@@ -381,37 +400,33 @@ L078:
 	push	ac[0]
 	mul
 	sub
-	push	sb
-	push	10122
-	push	0
+	push	sb[10122]
 	push	sb[10165]
 	push	sb[3]
 	mul
-	push	sb[10163]
 	add
-	add
-	add
+	push	fp[0]
 	add
 	pop	ac
 	pop	ac[0]
-L076:
+L075:
 	push	sb[10165]
 	push	1
 	add
 	pop	sb[10165]
-	jmp	L078
-L077:
+	jmp	L077
+L076:
 	push	0
 	pop	sb[10165]
-L081:
+L080:
 	push	sb[10165]
 	push	sb[0]
 	compLT
-	j0	L080
+	j0	L079
 	push	sb
 	push	2674
 	push	0
-	push	sb[10163]
+	push	fp[0]
 	push	sb[0]
 	mul
 	push	sb[10165]
@@ -422,18 +437,18 @@ L081:
 	pop	ac
 	push	ac[0]
 	push	sb[2]
-	push	fp[0]
+	push	fp[2]
 	mul
 	push	sb
 	push	10125
 	push	0
-	push	sb[10163]
+	push	fp[0]
 	add
 	add
 	add
 	pop	ac
 	push	ac[0]
-	call	L027, 1
+	call	L026, 1
 	mul
 	push	fp[-5]
 	push	0
@@ -447,7 +462,7 @@ L081:
 	push	sb
 	push	2674
 	push	0
-	push	sb[10163]
+	push	fp[0]
 	push	sb[0]
 	mul
 	push	sb[10165]
@@ -457,241 +472,241 @@ L081:
 	add
 	pop	ac
 	pop	ac[0]
-L079:
+L078:
 	push	sb[10165]
 	push	1
 	add
 	pop	sb[10165]
-	jmp	L081
-L080:
-L073:
-	push	sb[10163]
+	jmp	L080
+L079:
+L072:
+	push	fp[0]
 	push	1
 	add
-	pop	sb[10163]
-	jmp	L075
-L074:
+	pop	fp[0]
+	jmp	L074
+L073:
 	ret
-L050:
+L049:
+	push	sp
+	push	4
+	add
+	pop	sp
+	push	0
+	pop	fp[0]
+L083:
+	push	fp[0]
+	push	sb[3]
+	compLT
+	j0	L082
+	push	0.000000
+	pop	fp[2]
+	push	0
+	pop	sb[10165]
+L086:
+	push	sb[10165]
+	push	sb[0]
+	compLT
+	j0	L085
+	push	fp[2]
+	push	fp[-5]
+	push	0
+	push	sb[10165]
+	add
+	add
+	pop	ac
+	push	ac[0]
+	push	sb
+	push	2674
+	push	0
+	push	fp[0]
+	push	sb[0]
+	mul
+	push	sb[10165]
+	add
+	add
+	add
+	add
+	pop	ac
+	push	ac[0]
+	mul
+	add
+	pop	fp[2]
+L084:
+	push	sb[10165]
+	push	1
+	add
+	pop	sb[10165]
+	jmp	L086
+L085:
+	push	fp[2]
+	push	sb
+	push	10123
+	push	0
+	push	0
+	add
+	add
+	add
+	pop	ac
+	push	ac[0]
+	add
+	call	L036, 1
+	push	sb
+	push	10125
+	push	0
+	push	fp[0]
+	add
+	add
+	add
+	pop	ac
+	pop	ac[0]
+L081:
+	push	fp[0]
+	push	1
+	add
+	pop	fp[0]
+	jmp	L083
+L082:
+	push	0
+	pop	fp[0]
+L089:
+	push	fp[0]
+	push	sb[1]
+	compLT
+	j0	L088
+	push	0.000000
+	pop	fp[2]
+	push	0
+	pop	sb[10165]
+L092:
+	push	sb[10165]
+	push	sb[3]
+	compLT
+	j0	L091
+	push	fp[2]
+	push	sb
+	push	10125
+	push	0
+	push	sb[10165]
+	add
+	add
+	add
+	pop	ac
+	push	ac[0]
+	push	sb[10122]
+	push	fp[0]
+	push	sb[3]
+	mul
+	add
+	push	sb[10165]
+	add
+	pop	ac
+	push	ac[0]
+	mul
+	add
+	pop	fp[2]
+L090:
+	push	sb[10165]
+	push	1
+	add
+	pop	sb[10165]
+	jmp	L092
+L091:
+	push	fp[2]
+	push	sb
+	push	10123
+	push	0
+	push	1
+	add
+	add
+	add
+	pop	ac
+	push	ac[0]
+	add
+	call	L036, 1
+	push	sb
+	push	10153
+	push	0
+	push	fp[0]
+	add
+	add
+	add
+	pop	ac
+	pop	ac[0]
+L087:
+	push	fp[0]
+	push	1
+	add
+	pop	fp[0]
+	jmp	L089
+L088:
+	push	sb[10153]
+	ret
+	ret
+L006:
 	push	sp
 	push	2
 	add
 	pop	sp
 	push	0
-	pop	sb[10163]
-L084:
-	push	sb[10163]
-	push	sb[3]
-	compLT
-	j0	L083
-	push	0.000000
 	pop	fp[0]
-	push	0
-	pop	sb[10165]
-L087:
-	push	sb[10165]
-	push	sb[0]
-	compLT
-	j0	L086
+L095:
 	push	fp[0]
-	push	fp[-5]
-	push	0
-	push	sb[10165]
-	add
-	add
-	pop	ac
-	push	ac[0]
-	push	sb
-	push	2674
-	push	0
-	push	sb[10163]
-	push	sb[0]
-	mul
-	push	sb[10165]
-	add
-	add
-	add
-	add
-	pop	ac
-	push	ac[0]
-	mul
-	add
-	pop	fp[0]
-L085:
-	push	sb[10165]
-	push	1
-	add
-	pop	sb[10165]
-	jmp	L087
-L086:
-	push	fp[0]
-	push	sb
-	push	10123
-	push	0
-	push	0
-	add
-	add
-	add
-	pop	ac
-	push	ac[0]
-	add
-	call	L037, 1
-	push	sb
-	push	10125
-	push	0
-	push	sb[10163]
-	add
-	add
-	add
-	pop	ac
-	pop	ac[0]
-L082:
-	push	sb[10163]
-	push	1
-	add
-	pop	sb[10163]
-	jmp	L084
-L083:
-	push	0
-	pop	sb[10163]
-L090:
-	push	sb[10163]
-	push	sb[1]
-	compLT
-	j0	L089
-	push	0.000000
-	pop	fp[0]
-	push	0
-	pop	sb[10165]
-L093:
-	push	sb[10165]
-	push	sb[3]
-	compLT
-	j0	L092
-	push	fp[0]
-	push	sb
-	push	10125
-	push	0
-	push	sb[10165]
-	add
-	add
-	add
-	pop	ac
-	push	ac[0]
-	push	sb
-	push	10122
-	push	0
-	push	sb[10163]
-	push	sb[3]
-	mul
-	push	sb[10165]
-	add
-	add
-	add
-	add
-	pop	ac
-	push	ac[0]
-	mul
-	add
-	pop	fp[0]
-L091:
-	push	sb[10165]
-	push	1
-	add
-	pop	sb[10165]
-	jmp	L093
-L092:
-	push	fp[0]
-	push	sb
-	push	10123
-	push	0
-	push	1
-	add
-	add
-	add
-	pop	ac
-	push	ac[0]
-	add
-	call	L037, 1
-	push	sb
-	push	10153
-	push	0
-	push	sb[10163]
-	add
-	add
-	add
-	pop	ac
-	pop	ac[0]
-L088:
-	push	sb[10163]
-	push	1
-	add
-	pop	sb[10163]
-	jmp	L090
-L089:
-	push	sb[10153]
-	ret
-	ret
-L006:
-	push	0
-	pop	sb[10163]
-L096:
-	push	sb[10163]
 	push	sb[2673]
 	compLT
-	j0	L095
+	j0	L094
 	push	0.100000
 	push	sb
 	push	2674
 	push	0
-	push	sb[10163]
+	push	fp[0]
 	add
 	add
 	add
 	pop	ac
 	pop	ac[0]
-L094:
-	push	sb[10163]
+L093:
+	push	fp[0]
 	push	1
 	add
-	pop	sb[10163]
-	jmp	L096
-L095:
+	pop	fp[0]
+	jmp	L095
+L094:
 	push	0
-	pop	sb[10163]
-L099:
-	push	sb[10163]
+	pop	fp[0]
+L098:
+	push	fp[0]
 	push	sb[2672]
 	compLT
-	j0	L098
+	j0	L097
 	push	0.100000
 	push	sb
 	push	10123
 	push	0
-	push	sb[10163]
+	push	fp[0]
 	add
 	add
 	add
 	pop	ac
 	pop	ac[0]
-L097:
-	push	sb[10163]
+L096:
+	push	fp[0]
 	push	1
 	add
-	pop	sb[10163]
-	jmp	L099
-L098:
+	pop	fp[0]
+	jmp	L098
+L097:
 	ret
-	call	L050, 0
+	call	L049, 0
 	ret
-L014:
+L013:
+	push	fp[-5]
+	push	fp[-4]
+	call	L049, 2
 	push	fp[-5]
 	push	fp[-4]
 	call	L050, 2
-	push	fp[-5]
 	push	fp[-4]
-	call	L051, 2
-	push	fp[-4]
-	call	L052, 1
+	call	L051, 1
 	ret
 	ret
