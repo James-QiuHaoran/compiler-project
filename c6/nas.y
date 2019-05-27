@@ -24,15 +24,15 @@
 
   extern FILE* yyin;
 
-  int reg[4]; // 0 - sb; 1 - fp; 2 - ac/in; 3 - sp
+  long reg[4]; // 0 - sb; 1 - fp; 2 - ac/in; 3 - sp
   #define SB reg[0]
   #define FP reg[1]
   #define IN reg[2]
   #define SP reg[3]
 
-  #define SIZE 20000 // max code size
-  #define LABELS 1000
-  #define ST_SIZE 20000 // max stack size
+  #define SIZE 5000000 // max code size
+  #define LABELS 500000
+  #define ST_SIZE 1000000 // max stack size
 
   // Increment SP and check
   // #define ISP if (++SP >= ST_SIZE) error(1, 0, "Stack overflow!")
@@ -41,10 +41,10 @@
 
   // max size of string is 500
 
-  int pc; // program counter during assembly
+  long pc; // program counter during assembly
   long in[SIZE], opx[SIZE]; // instructions and their operands
   double op[SIZE];
-  int lb[LABELS]; // labels[000..999]
+  long lb[LABELS];
 
   char *str;
 %}
@@ -154,8 +154,8 @@ int main(int argc, char *argv[]) {
   FP = 0;
   SP = 0;
 
-  int i = 0; // the pc used by the execution
-  int temp;
+  long i = 0; // the pc used by the execution
+  double temp;
 
   char buf[500];
 
@@ -211,7 +211,7 @@ int main(int argc, char *argv[]) {
 	break;
 
       case END:
-	i = 99999999;
+	i = 999999999999;
 	break;
 
 #define EVAL(opr) st[SP-2] = st[SP-2] opr st[SP-1]; SP--; i++; break;

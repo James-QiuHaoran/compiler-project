@@ -7,13 +7,11 @@ nops = 10;
 rate = 1.0;
 nhid = 28;
 anneal = 0.99;
-iterations = 128;
+iterations = 2;
 
 // load training set
 puts("please enter number of samples");
 geti(rows);
-puts_("rows = ");
-puti(rows);
 maxRows = 2000;
 if (rows > maxRows) {
     puts("FATAL: no more than 2000 samples!");
@@ -28,8 +26,6 @@ cols = nips + nops;
 for (row = 0; row < rows; row = row + 1;) {
     for (col = 0; col < cols; col = col + 1;) {
         geti(val);
-        puts_("col = ");
-        puti(col);
         if (col < nips) {
             allIn[row][col] = val;
         } else {
@@ -61,29 +57,53 @@ pdErr(a, b) {
 }
 
 // compute total error of target to output.
-totErr(tg, o, size) {
+totErr(tg) {
+    puts("calculate total error");
     sum = 0.0;
-    for (i = 0; i < size; i = i + 1;)
-        sum = sum + err(tg[i], o[i]);
+    for (errIt = 0; errIt < nops; errIt = errIt + 1;) {
+        puts_("o[");
+        puti_(errIt);
+        puts_("]=");
+        putd(o[errIt]);
+        puts_("tg[");
+        puti_(errIt);
+        puts_("]=");
+        putd(tg[errIt]);
+        sum = sum + err(tg[errIt], o[errIt]);
+    }
     return sum;
 }
 
-max(a, b) {
-    if (a > b) {
-        return a;
-    } else {
-        return b;
-    }
+// Returns approximate value of e^x
+// using sum of first n terms of Taylor Series
+exp(x) {
+    n = 10; // use first n terms
+
+    sum = 1.0; // initialize sum of series
+
+    for (i = n - 1; i > 0; i = i - 1;)
+        sum = 1 + x * sum realdiv i;
+
+    return sum;
 }
 
-// ReLu activation function
+// sigmoid activation function
 activate(a) {
-    return max(0, a);
+    return 1.0 realdiv (1.0 + exp(-a));
 }
 
 // returns partial derivative of activation function
 pdActivate(a) {
-    return 1;
+    return a * (1.0 - a);
+}
+
+// print out weights
+printWeights() {
+    puts("printing out weights...");
+    for (i = 0; i < nw; i = i + 1;) {
+        putd(w[i]);
+    }
+    puts("finish printing out weights");
 }
 
 // Performs back propagation.
@@ -94,9 +114,9 @@ backwardProp(in, tg) {
         for (j = 0; j < nops; j = j + 1;) {
             a = pdErr(o[j], tg[j]);
             b = pdActivate(o[j]);
-            sum = sum + a * b * x[j * nhid + i];
+            sum = sum + a * b * *(x + j * nhid + i);
             // Correct weights in hidden to output layer.
-            x[j * nhid + i] = x[j * nhid + i] - rate * a * b * h[i];
+            *(x + j * nhid + i) = *(x + j * nhid + i) - rate * a * b * h[i];
         }
         // Correct weights in input to hidden layer.
         for (j = 0; j < nips; j = j + 1;) {
@@ -107,6 +127,7 @@ backwardProp(in, tg) {
 
 // Performs forward propagation.
 forwardProp(in, tg) {
+    puts("forward propagation");
     // Calculate hidden layer neuron values.
     for (i = 0; i < nhid; i = i + 1;) {
         sum = 0.0;
@@ -114,16 +135,23 @@ forwardProp(in, tg) {
             sum = sum + in[j] * w[i * nips + j];
         }
         h[i] = activate(sum + bias[0]);
+        puts_("h[");
+        puti_(i);
+        puts_("]=");
+        putd(h[i]);
     }
     // Calculate output layer neuron values.
     for (i = 0; i < nops; i = i + 1;)
     {
         sum = 0.0;
         for (j = 0; j < nhid; j = j + 1;)
-            sum = sum + h[j] * x[i * nhid + j];
+            sum = sum + h[j] * *(x + i * nhid + j);
         o[i] = activate(sum + bias[1]);
+        puts_("o[");
+        puti_(i);
+        puts_("]=");
+        putd(o[i]);
     }
-    return o;
 }
 
 randomize() {
@@ -144,15 +172,19 @@ predict() {
 // Train a neural network
 train(in, tg) {
     forwardProp(in, tg);
+    // printWeights();
     backwardProp(in, tg);
-    return totErr(tg, o, nops);
+    // printWeights();
+    return totErr(tg);
 }
 
 randomize();
 
 // start training
-for (i = 0; i < iterations; i = i + 1;) {
-    shuffle();
+for (k = 0; k < iterations; k = k + 1;) {
+    puts_("training iteration: #");
+    puti(k);
+    // shuffle();
     error = 0.0;
     for (j = 0; j < rows; j = j + 1;) {
         in = allIn[j];
