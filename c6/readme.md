@@ -34,6 +34,10 @@ compatibility
   - nas program is modified to support
 random number functionality
 
+## Environment
+
+All the implementation, test cases, sample programs, and demos are developed under Ubuntu 18.04.1 LTS.
+
 ## Example programs
 
 There are three sample programs in the directory `sample_progs`:
@@ -46,11 +50,10 @@ There are three sample programs in the directory `sample_progs`:
 
 There are two demos in the directory `demos`:
 
-- Tic-Tac-Toe
+- Tic-Tac-Toe: an interactive game application (changeable board size);
 - Neural Network
-    - Consisting of a library and a test program (hand-written digit
-    recognition)
-    - For details, refer to demos/neural_network/readme.md
+    - Consisting of a library and a test program (hand-written digit recognition);
+    - For details, refer to `demos/neural_network/readme.md`;
 
 ## To run the compiler
 
