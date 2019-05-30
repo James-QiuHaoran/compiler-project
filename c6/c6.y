@@ -17,7 +17,6 @@ nodeType *arr(nodeType* id, nodeType *offset);
 nodeType *multiDimensionalizeArray(nodeType *p, nodeType *offset);
 nodeType *func(char* name, nodeType *args, nodeType *stmt);
 nodeType *strConcat(nodeType* str1, nodeType* str2);
-nodeType *str(nodeType* id, nodeType *offset);
 
 /* node management */
 void freeNode(nodeType *p);
@@ -61,7 +60,7 @@ nodeLinkedListType* stmts;
 %token <sIndex> LEFT_VARIABLE RIGHT_VARIABLE
 %token FOR WHILE IF RETURN CALL GETI GETC GETS PUTI PUTD PUTC PUTS PUTI_ PUTC_ PUTS_ RAND
 %token CONTINUE BREAK
-%token ARRAY_DECL STRING_DECL
+%token ARRAY_DECL
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -71,7 +70,7 @@ nodeLinkedListType* stmts;
 %left '*' '/' REALDIV '%'
 %nonassoc UMINUS REF DEREF
 
-%type <nPtr> stmt expr stmt_list func params param variable args arg array assignment assignment_list arr_decl_list left_var arr_list str_decl str_list
+%type <nPtr> stmt expr stmt_list func params param variable args arg array assignment assignment_list arr_decl_list left_var arr_list
 
 %%
 
@@ -140,7 +139,6 @@ stmt:
         | RETURN STRING ';'                                { $$ = opr(RETURN, 1, var((long) $2, varTypeStr)); }
         | '{' stmt_list '}'                                { $$ = $2; }
         | arr_decl_list ';'                                { $$ = $1; }
-	| str_decl ';'					   { $$ = $1; }
         ;
 
 assignment:
@@ -212,14 +210,6 @@ arr_list:
         | arr_list ']' '[' expr                            { $$ = multiDimensionalizeArray($1, $4); }
         ;
 
-str_decl:
-	STRING_DECL str_list '=' STRING	{ $$ = opr('=', 2, $2, $4); }
-	; 
-
-str_list:
-	variable '[' expr ']'	{ $$ = str($1, $3); }
-	;
-
 %%
 
 #define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
@@ -271,22 +261,6 @@ nodeType *doubleVar(double value, varTypeEnum type) {
     p->con.type = type;
     p->con.doubleValue = value;
     return p;
-}
-
-nodeType *str(nodeType* id, nodeType *offset){
-    nodeType *p;
-    size_t nodeSize;
-
-    /* allocate node */
-    nodeSize = SIZEOF_NODETYPE + sizeof(strNodeType);
-    if ((p = malloc(nodeSize)) == NULL)
-        yyerror("out of memory");
-
-    /* copy information */
-    p->type = typeStr;
-    strcpy(p->str.name, id->id.varName);
-    p->str.size = offset->con.value;
-    return p;	
 }
 
 

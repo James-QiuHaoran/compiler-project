@@ -10,11 +10,9 @@
 #define LOCAL_TAB_SIZE 256
 #define FUNC_TAB_SIZE 256
 
-#define STR_LIST_SIZE 14
-
 #define STR_HASH_LEN 4
 
-typedef enum { typeCon, typeId, typeArr, typeOpr, typeFunc, typeStr } nodeEnum;
+typedef enum { typeCon, typeId, typeArr, typeOpr, typeFunc } nodeEnum;
 typedef enum { varTypeInt, varTypeDouble, varTypeChar, varTypeStr, varTypeNil } varTypeEnum;
 typedef enum { typeFuncList, typeStmtList } listTypeEnum;
 
@@ -39,11 +37,6 @@ typedef struct oprNodeType {
     int nops;                   /* number of operands */
     struct nodeType *op[1];     /* operands */
 } oprNodeType;
-
-typedef struct strNodeType {
-    char name[VAR_NAME_LEN];
-    int size;
-} strNodeType;
 
 /* arrays */
 typedef struct arrNodeType {
@@ -94,7 +87,6 @@ typedef struct nodeType {
         arrNodeType arr;        /* arrays */
         oprNodeType opr;        /* operators */
         funcNodeType func;      /* functions*/
-	strNodeType str;
     };
 } nodeType;
 
