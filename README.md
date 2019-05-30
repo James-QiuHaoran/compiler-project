@@ -2,6 +2,10 @@
 
 This project includes a simple compiler based on flex and bison, and one of its application.
 
+## TODO
+
+- struct
+
 ## Contact
 
 - Haoran Qiu (jamesqiu@hku.hk)
